@@ -2,6 +2,8 @@
   "logLevel": 4,
   "enabledTools": [
     "animation-create",
+    "animation-get-data",
+    "animation-modify",
     "assets-copy",
     "assets-createfolder",
     "assets-delete",
