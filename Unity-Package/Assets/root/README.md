@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://github.com/IvanMurzak/Unity-AI-Animation">Unity AI Animation</a></h1>
+<h1 align="center"><a href="https://github.com/IvanMurzak/Unity-AI-Animation?tab=readme-ov-file#unity-ai-animation">Unity AI Animation</a></h1>
 
 <div align="center" width="100%">
 
