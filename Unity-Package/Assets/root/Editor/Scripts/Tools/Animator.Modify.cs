@@ -159,10 +159,13 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         {
             if (string.IsNullOrEmpty(mod.parameterName))
                 throw new Exception("parameterName is required for AddParameter.");
-            if (!mod.parameterType.HasValue)
+            if (string.IsNullOrEmpty(mod.parameterType))
                 throw new Exception("parameterType is required for AddParameter.");
 
-            controller.AddParameter(mod.parameterName, mod.parameterType.Value);
+            if (!Enum.TryParse<AnimatorControllerParameterType>(mod.parameterType, true, out var paramType))
+                throw new Exception($"Invalid parameterType: {mod.parameterType}. Valid values: Float, Int, Bool, Trigger.");
+
+            controller.AddParameter(mod.parameterName, paramType);
 
             // Set default value if provided
             var parameters = controller.parameters;
@@ -170,7 +173,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             {
                 if (parameters[i].name == mod.parameterName)
                 {
-                    switch (mod.parameterType.Value)
+                    switch (paramType)
                     {
                         case AnimatorControllerParameterType.Float:
                             parameters[i].defaultFloat = mod.defaultFloat ?? 0f;
@@ -356,8 +359,15 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                     if (string.IsNullOrEmpty(condition.parameter))
                         continue;
 
+                    var conditionMode = AnimatorConditionMode.Equals;
+                    if (!string.IsNullOrEmpty(condition.mode))
+                    {
+                        if (!Enum.TryParse<AnimatorConditionMode>(condition.mode, true, out conditionMode))
+                            throw new Exception($"Invalid condition mode: {condition.mode}. Valid values: If, IfNot, Greater, Less, Equals, NotEqual.");
+                    }
+
                     transition.AddCondition(
-                        condition.mode ?? AnimatorConditionMode.Equals,
+                        conditionMode,
                         condition.threshold ?? 0f,
                         condition.parameter
                     );
@@ -391,66 +401,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             return childState.state;
         }
 
-        #region Modify Data Classes
-
-        public enum AnimatorModificationType
-        {
-            AddParameter,
-            RemoveParameter,
-            AddLayer,
-            RemoveLayer,
-            AddState,
-            RemoveState,
-            SetDefaultState,
-            AddTransition,
-            RemoveTransition,
-            AddAnyStateTransition,
-            SetStateMotion,
-            SetStateSpeed
-        }
-
-        public class AnimatorConditionData
-        {
-            public string? parameter;
-            public AnimatorConditionMode? mode;
-            public float? threshold;
-        }
-
-        public class AnimatorModification
-        {
-            public AnimatorModificationType type;
-
-            // Parameter fields
-            public string? parameterName;
-            public AnimatorControllerParameterType? parameterType;
-            public float? defaultFloat;
-            public int? defaultInt;
-            public bool? defaultBool;
-
-            // Layer fields
-            public string? layerName;
-
-            // State fields
-            public string? stateName;
-            public string? motionAssetPath;
-            public float? speed;
-
-            // Transition fields
-            public string? sourceStateName;
-            public string? destinationStateName;
-            public bool? hasExitTime;
-            public float? exitTime;
-            public float? duration;
-            public bool? hasFixedDuration;
-            public AnimatorConditionData[]? conditions;
-        }
-
-        public class ModifyAnimatorInfo
-        {
-            public string path = string.Empty;
-            public int instanceId;
-            public string name = string.Empty;
-        }
+        #region Modify Response Classes
 
         public class ModifyAnimatorResponse
         {

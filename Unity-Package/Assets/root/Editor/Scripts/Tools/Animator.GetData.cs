@@ -178,65 +178,6 @@ namespace com.IvanMurzak.Unity.MCP.Animation
 
         #region GetData Response Classes
 
-        public class AnimatorParameterInfo
-        {
-            public string name = string.Empty;
-            public string type = string.Empty;
-            public float defaultFloat;
-            public int defaultInt;
-            public bool defaultBool;
-        }
-
-        public class AnimatorConditionInfo
-        {
-            public string parameter = string.Empty;
-            public string mode = string.Empty;
-            public float threshold;
-        }
-
-        public class AnimatorTransitionInfo
-        {
-            public string? destinationStateName;
-            public bool hasExitTime;
-            public float exitTime;
-            public bool hasFixedDuration;
-            public float duration;
-            public float offset;
-            public bool canTransitionToSelf;
-            public List<AnimatorConditionInfo>? conditions;
-        }
-
-        public class AnimatorStateInfo
-        {
-            public string name = string.Empty;
-            public string tag = string.Empty;
-            public float speed;
-            public bool speedParameterActive;
-            public string speedParameter = string.Empty;
-            public float cycleOffset;
-            public bool cycleOffsetParameterActive;
-            public string cycleOffsetParameter = string.Empty;
-            public bool mirror;
-            public bool mirrorParameterActive;
-            public string mirrorParameter = string.Empty;
-            public bool writeDefaultValues;
-            public string? motionName;
-            public List<AnimatorTransitionInfo>? transitions;
-        }
-
-        public class AnimatorLayerInfo
-        {
-            public string name = string.Empty;
-            public float defaultWeight;
-            public string blendingMode = string.Empty;
-            public int syncedLayerIndex;
-            public bool iKPass;
-            public string? defaultStateName;
-            public List<AnimatorStateInfo>? states;
-            public List<string>? subStateMachines;
-            public List<AnimatorTransitionInfo>? anyStateTransitions;
-        }
-
         public class GetAnimatorDataResponse
         {
             public string name = string.Empty;

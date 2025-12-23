@@ -4,6 +4,7 @@
     "animation-create",
     "animation-get-data",
     "animation-modify",
+    "animator-create",
     "animator-get-data",
     "animator-modify",
     "assets-copy",
