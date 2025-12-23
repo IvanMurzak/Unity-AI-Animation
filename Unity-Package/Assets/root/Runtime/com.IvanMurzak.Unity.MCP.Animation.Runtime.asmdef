@@ -4,9 +4,7 @@
         "com.IvanMurzak.Unity.MCP.Runtime"
     ],
     "includePlatforms": [],
-    "excludePlatforms": [
-        "Editor"
-    ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
