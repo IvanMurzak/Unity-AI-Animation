@@ -23,7 +23,7 @@ AI-powered tools for Unity animation workflow. Create and modify AnimationClips 
 - [Video Tutorial for Visual Studio Code](https://www.youtube.com/watch?v=ZhP7Ju91mOE)
 - [Video Tutorial for Visual Studio](https://www.youtube.com/watch?v=RGdak4T69mc)
 
-[![DOWNLOAD INSTALLER](https://github.com/IvanMurzak/Unity-MCP/blob/main/docs/img/button/button_download.svg?raw=true)](https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/1.0.0/AI-Animation-Installer.unitypackage)
+[![DOWNLOAD INSTALLER](https://github.com/IvanMurzak/Unity-MCP/blob/main/docs/img/button/button_download.svg?raw=true)](https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/1.0.2/AI-Animation-Installer.unitypackage)
 
 ### Stability status
 
@@ -51,7 +51,7 @@ AnimatorController tools:
 
 ### Option 1 - Installer
 
-- **[⬇️ Download Installer](https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/1.0.0/AI-Animation-Installer.unitypackage)**
+- **[⬇️ Download Installer](https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/1.0.2/AI-Animation-Installer.unitypackage)**
 - **📂 Import installer into Unity project**
   > - You can double-click on the file - Unity will open it automatically
   > - OR: Open Unity Editor first, then click on `Assets/Import Package/Custom Package`, and choose the file
