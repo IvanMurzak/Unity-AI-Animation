@@ -17,6 +17,12 @@
 
 AI-powered tools for Unity animation workflow. Create and modify AnimationClips and AnimatorControllers directly through natural language commands. Automate repetitive animation tasks like setting up state machines, configuring transitions, and adding keyframes. Ideal for rapid prototyping, procedural animation generation, and streamlining complex animator setups. Built on top of the [AI Game Developer](https://github.com/IvanMurzak/Unity-MCP) platform.
 
+### How to use
+
+- [Instructions](https://github.com/IvanMurzak/Unity-MCP?tab=readme-ov-file#step-2-install-mcp-client)
+- [Video Tutorial for Visual Studio Code](https://www.youtube.com/watch?v=ZhP7Ju91mOE)
+- [Video Tutorial for Visual Studio](https://www.youtube.com/watch?v=RGdak4T69mc)
+
 [![DOWNLOAD INSTALLER](https://github.com/IvanMurzak/Unity-MCP/blob/main/docs/img/button/button_download.svg?raw=true)](https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/1.0.0/AI-Animation-Installer.unitypackage)
 
 ### Stability status
