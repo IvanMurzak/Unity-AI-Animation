@@ -152,7 +152,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             if (mod.keyframes == null || mod.keyframes.Length == 0)
                 throw new Exception("keyframes array is required for setCurve.");
 
-            var type = ResolveComponentType(mod.componentType);
+            var type = TypeUtils.GetType(mod.componentType);
             if (type == null)
                 throw new Exception($"Could not resolve component type: {mod.componentType}");
 
@@ -180,7 +180,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             if (string.IsNullOrEmpty(mod.propertyName))
                 throw new Exception("propertyName is required for removeCurve.");
 
-            var type = ResolveComponentType(mod.componentType);
+            var type = TypeUtils.GetType(mod.componentType);
             if (type == null)
                 throw new Exception($"Could not resolve component type: {mod.componentType}");
 
@@ -203,49 +203,6 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                 intParameter = mod.intParameter ?? 0
             };
             eventsList.Add(animEvent);
-        }
-
-        private static Type? ResolveComponentType(string typeName)
-        {
-            // Try direct type lookup
-            var type = Type.GetType(typeName);
-            if (type != null) return type;
-
-            // Try common Unity namespaces
-            var unityNamespaces = new[]
-            {
-                "UnityEngine.",
-                "UnityEngine.UI.",
-                "UnityEngine.Rendering.",
-                "TMPro."
-            };
-
-            foreach (var ns in unityNamespaces)
-            {
-                type = Type.GetType($"{ns}{typeName}, UnityEngine");
-                if (type != null) return type;
-
-                type = Type.GetType($"{ns}{typeName}, UnityEngine.CoreModule");
-                if (type != null) return type;
-
-                type = Type.GetType($"{ns}{typeName}, UnityEngine.UIModule");
-                if (type != null) return type;
-            }
-
-            // Search all loaded assemblies
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                type = assembly.GetType(typeName);
-                if (type != null) return type;
-
-                foreach (var ns in unityNamespaces)
-                {
-                    type = assembly.GetType($"{ns}{typeName}");
-                    if (type != null) return type;
-                }
-            }
-
-            return null;
         }
 
         #region Response Data Classes
