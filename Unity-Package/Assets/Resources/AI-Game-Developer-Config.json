@@ -1,6 +1,7 @@
 {
   "logLevel": 3,
   "enabledTools": [
+    "animation-create",
     "assets-copy",
     "assets-createfolder",
     "assets-delete",
@@ -100,5 +101,5 @@
   ],
   "host": "http://localhost:58890",
   "timeoutMs": 10000,
-  "keepConnected": false
+  "keepConnected": true
 }

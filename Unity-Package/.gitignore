@@ -78,3 +78,5 @@ crashlytics-build.properties
 .claude
 
 /UserSettings/
+
+/.vscode/mcp.json
