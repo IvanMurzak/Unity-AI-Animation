@@ -13,6 +13,7 @@
         "nunit.framework.dll"
     ],
     "autoReferenced": false,
+    "testAssemblies": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

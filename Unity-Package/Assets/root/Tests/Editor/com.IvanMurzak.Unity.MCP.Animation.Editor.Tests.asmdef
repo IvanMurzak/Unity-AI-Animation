@@ -6,7 +6,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "com.IvanMurzak.Unity.MCP.Animation.Runtime",
-        "com.IvanMurzak.Unity.MCP.Animation.Editor"
+        "com.IvanMurzak.Unity.MCP.Animation.Editor",
+        "com.IvanMurzak.Unity.MCP.Editor.Tests"
     ],
     "includePlatforms": [
         "Editor"
@@ -15,9 +16,11 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "ReflectorNet.dll"
     ],
     "autoReferenced": false,
+    "testAssemblies": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

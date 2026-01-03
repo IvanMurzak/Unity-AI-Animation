@@ -9,36 +9,41 @@
 */
 
 #nullable enable
-using System.Collections;
+using System;
+using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
+using com.IvanMurzak.Unity.MCP.Animation;
 
-namespace com.IvanMurzak.Unity.MCP.Animation.Runtime.Tests
+namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
-    public partial class DemoTest
+    public class AnimationToolRegistrationTests
     {
-        [UnitySetUp]
-        public IEnumerator SetUp()
+        [Test]
+        public void ToolTypesHaveMcpAttribute()
         {
-            Debug.Log($"[{nameof(DemoTest)}] SetUp");
-            yield return null;
-        }
-        [UnityTearDown]
-        public IEnumerator TearDown()
-        {
-            Debug.Log($"[{nameof(DemoTest)}] TearDown");
-            yield return null;
+            Assert.IsTrue(HasAttributeByName(typeof(AnimationTools), "McpPluginToolTypeAttribute"));
+            Assert.IsTrue(HasAttributeByName(typeof(AnimatorTools), "McpPluginToolTypeAttribute"));
         }
 
-        [UnityTest]
-        public IEnumerator Always_Valid_Test()
+        [Test]
+        public void ToolMethodsAreRegistered()
         {
-            Debug.Log($"[{nameof(DemoTest)}] Test Log Message ABC");
-            Debug.Log($"[{nameof(DemoTest)}] Test Log Message ABC 123");
+            Assert.IsNotEmpty(GetToolMethods(typeof(AnimationTools)));
+            Assert.IsNotEmpty(GetToolMethods(typeof(AnimatorTools)));
+        }
 
-            Assert.IsTrue(true, "This test is a placeholder and should be replaced with actual test logic.");
-            yield return null;
+        private static MethodInfo[] GetToolMethods(Type type)
+        {
+            return type.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Where(method => HasAttributeByName(method, "McpPluginToolAttribute"))
+                .ToArray();
+        }
+
+        private static bool HasAttributeByName(MemberInfo member, string attributeName)
+        {
+            return member.GetCustomAttributes(false).Any(attribute =>
+                string.Equals(attribute.GetType().Name, attributeName, StringComparison.Ordinal));
         }
     }
 }
