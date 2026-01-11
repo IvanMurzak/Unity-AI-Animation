@@ -1,6 +1,6 @@
 /*
 ┌──────────────────────────────────────────────────────────────────┐
-│  Author: Tristyn Mackay (https://github.com/Tristyn-InMetaTech)  │
+│  Author: Tristyn Mackay (https://github.com/InMetaTech-Tristyn)  │
 │  Repository: GitHub (https://github.com/IvanMurzak/Unity-MCP)    │
 │  Copyright (c) 2025 Ivan Murzak                                  │
 │  Licensed under the Apache License, Version 2.0.                 │
