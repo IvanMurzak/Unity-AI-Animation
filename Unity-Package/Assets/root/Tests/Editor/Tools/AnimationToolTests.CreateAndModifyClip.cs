@@ -1,3 +1,13 @@
+/*
+┌──────────────────────────────────────────────────────────────────┐
+│  Author: Tristyn Mackay (https://github.com/Tristyn-InMetaTech)  │
+│  Repository: GitHub (https://github.com/IvanMurzak/Unity-MCP)    │
+│  Copyright (c) 2025 Ivan Murzak                                  │
+│  Licensed under the Apache License, Version 2.0.                 │
+│  See the LICENSE file in the project root for more information.  │
+└──────────────────────────────────────────────────────────────────┘
+*/
+
 #nullable enable
 
 using System;
@@ -12,10 +22,10 @@ using UnityEngine;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
-    public class AnimationClipToolExecutionTests : BaseTest
+    public partial class AnimationClipTests : BaseTest
     {
         [Test]
-        public void CreateAnimationClip_GetData_Modify_Succeeds()
+        public void AnimationClip_CreateAndModify()
         {
             MainThreadInstaller.Init();
 
@@ -60,7 +70,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                         {
                             ""type"": ""RemoveCurve"",
                             ""componentType"": ""UnityEngine.Transform"",
-                            ""propertyName"": ""localPosition.x""
+                            ""propertyName"": ""m_LocalPosition""
                         },
                         { ""type"": ""ClearCurves"" },
                         { ""type"": ""SetFrameRate"", ""frameRate"": 30 },

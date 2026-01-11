@@ -20,7 +20,6 @@
         "ReflectorNet.dll"
     ],
     "autoReferenced": false,
-    "testAssemblies": false,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

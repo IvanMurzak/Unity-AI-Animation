@@ -1,6 +1,6 @@
 /*
 ┌──────────────────────────────────────────────────────────────────┐
-│  Author: Ivan Murzak (https://github.com/IvanMurzak)             │
+│  Author: Tristyn Mackay (https://github.com/Tristyn-InMetaTech)  │
 │  Repository: GitHub (https://github.com/IvanMurzak/Unity-MCP)    │
 │  Copyright (c) 2025 Ivan Murzak                                  │
 │  Licensed under the Apache License, Version 2.0.                 │
@@ -9,16 +9,26 @@
 */
 
 #nullable enable
-using System;
-using System.Linq;
-using System.Reflection;
-using NUnit.Framework;
+
 using com.IvanMurzak.Unity.MCP.Animation;
+using com.IvanMurzak.Unity.MCP.Editor.Tests;
+using NUnit.Framework;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
-    public class AnimationToolRegistrationTests
+    public partial class ToolTests
     {
-        // Empty
+        [Test]
+        public void AnimationToolTypeHasMcpAttribute()
+        {
+            Assert.IsTrue(HasAttributeByName(typeof(AnimationTools), "McpPluginToolTypeAttribute"));
+        }
+
+        [Test]
+        public void AnimationToolMethodsAreRegistered()
+        {
+            var toolMethods = GetToolMethods(typeof(AnimationTools));
+            Assert.IsNotEmpty(toolMethods);
+        }
     }
 }

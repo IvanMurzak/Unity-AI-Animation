@@ -184,31 +184,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             if (type == null)
                 throw new Exception($"Could not resolve component type: {mod.componentType}");
 
-            var propertyName = NormalizeRemoveCurvePropertyName(mod.propertyName!);
-            clip.SetCurve(mod.relativePath ?? "", type, propertyName, null);
-        }
-
-        private static string NormalizeRemoveCurvePropertyName(string propertyName)
-        {
-            if (propertyName.StartsWith("localPosition.", StringComparison.Ordinal)
-                || propertyName.StartsWith("m_LocalPosition.", StringComparison.Ordinal))
-            {
-                return "m_LocalPosition";
-            }
-
-            if (propertyName.StartsWith("localScale.", StringComparison.Ordinal)
-                || propertyName.StartsWith("m_LocalScale.", StringComparison.Ordinal))
-            {
-                return "m_LocalScale";
-            }
-
-            if (propertyName.StartsWith("localRotation.", StringComparison.Ordinal)
-                || propertyName.StartsWith("m_LocalRotation.", StringComparison.Ordinal))
-            {
-                return "m_LocalRotation";
-            }
-
-            return propertyName;
+            clip.SetCurve(mod.relativePath ?? "", type, mod.propertyName, null);
         }
 
         private static void ApplyAddEvent(List<AnimationEvent> eventsList, AnimationModification mod)
