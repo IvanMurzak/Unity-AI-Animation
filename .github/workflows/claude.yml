@@ -25,6 +25,13 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -46,5 +53,12 @@ jobs:
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr:*)'
-
+          claude_args: >-
+            --allowedTools Bash
+            --allowedTools Edit
+            --allowedTools Write
+            --allowedTools Glob
+            --allowedTools Grep
+            --allowedTools Read
+            --allowedTools WebFetch
+            --allowedTools WebSearch
