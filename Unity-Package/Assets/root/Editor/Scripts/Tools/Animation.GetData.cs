@@ -28,7 +28,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         [McpPluginTool
         (
             AnimationGetDataToolId,
-            Title = "Animation / Get Data"
+            Title = "Animation / Get Data",
+            ReadOnlyHint = true
         )]
         [Description(@"Get data about a Unity AnimationClip asset file. Returns information such as name, length, frame rate, wrap mode, animation curves, and events.")]
         public static GetDataResponse GetData
