@@ -21,7 +21,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer
         {
             Debug.Log("Starting Package Export...");
 
-            var packagePath = "Assets/AI Animation Installer";
+            var packagePath = "Assets/com.IvanMurzak/AI Animation Installer";
             var outputPath = "build/AI-Animation-Installer.unitypackage";
 
             // Ensure build directory exists
