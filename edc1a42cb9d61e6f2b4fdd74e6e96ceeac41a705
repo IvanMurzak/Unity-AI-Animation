@@ -1,0 +1,23 @@
+.github/workflows/bump_version.yml
+  2982e6e8c803a006 31-32,42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "edc1a42cb9d61e6f2b4fdd74e6e96ceeac41a705",
+  "prompts": {
+    "2982e6e8c803a006": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e449f4b5-0e11-4731-823a-16a16cef2db0",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>",
+      "messages": [],
+      "total_additions": 53,
+      "total_deletions": 52,
+      "accepted_lines": 10,
+      "overriden_lines": 0
+    }
+  }
+}
