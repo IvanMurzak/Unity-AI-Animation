@@ -296,6 +296,40 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             }).Execute();
         }
 
+        [Test]
+        public void ModifyAnimationClip_RemoveCurve_NonExistentCurve_SucceedsWithClipUnchanged()
+        {
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            clipEx.AddChild(() =>
+            {
+                var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
+                clip.SetCurve(string.Empty, typeof(Transform), "m_LocalPosition.x", AnimationCurve.Linear(0f, 0f, 1f, 1f));
+                EditorUtility.SetDirty(clip);
+                AssetDatabase.SaveAssets();
+
+                var animRef = new AssetObjectRef(clipEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimationModification
+                    {
+                        type = ModificationType.RemoveCurve,
+                        relativePath = string.Empty,
+                        componentType = "UnityEngine.Transform",
+                        propertyName = "m_LocalPosition.y" // Does not exist on the clip
+                    }
+                };
+
+                var response = AnimationTools.ModifyAnimationClip(animRef, mods);
+
+                Assert.IsNull(response.errors, "Removing a non-existent curve should not produce an error");
+
+                var reloadedClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(clipEx.AssetPath);
+                var bindings = AnimationUtility.GetCurveBindings(reloadedClip);
+                Assert.IsTrue(bindings.Any(b => b.propertyName == "m_LocalPosition.x"),
+                    "Existing curve should remain untouched");
+            }).Execute();
+        }
+
         // ── ClearCurves ─────────────────────────────────────────────────────────
 
         [Test]

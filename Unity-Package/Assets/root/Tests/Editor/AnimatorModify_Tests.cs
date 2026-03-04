@@ -738,6 +738,30 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             }).Execute();
         }
 
+        [Test]
+        public void ModifyAnimatorController_AddTransition_MissingLayerName_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.AddTransition,
+                        sourceStateName = "Idle",
+                        destinationStateName = "Walk"
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("layerName", response.errors![0]);
+            }).Execute();
+        }
+
         // ── RemoveTransition ────────────────────────────────────────────────────
 
         [Test]
@@ -779,6 +803,78 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             }).Execute();
         }
 
+        [Test]
+        public void ModifyAnimatorController_RemoveTransition_MissingSourceState_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.RemoveTransition,
+                        layerName = BaseLayerName,
+                        destinationStateName = "Walk"
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("sourceStateName", response.errors![0]);
+            }).Execute();
+        }
+
+        [Test]
+        public void ModifyAnimatorController_RemoveTransition_MissingDestinationState_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.RemoveTransition,
+                        layerName = BaseLayerName,
+                        sourceStateName = "Idle"
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("destinationStateName", response.errors![0]);
+            }).Execute();
+        }
+
+        [Test]
+        public void ModifyAnimatorController_RemoveTransition_MissingLayerName_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.RemoveTransition,
+                        sourceStateName = "Idle",
+                        destinationStateName = "Walk"
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("layerName", response.errors![0]);
+            }).Execute();
+        }
+
         // ── AddAnyStateTransition ────────────────────────────────────────────────
 
         [Test]
@@ -814,6 +910,29 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 var updatedLayer = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerEx.AssetPath).layers[0];
                 Assert.IsTrue(updatedLayer.stateMachine.anyStateTransitions.Any(t => t.destinationState?.name == "Death"),
                     "Any-state transition to Death should exist");
+            }).Execute();
+        }
+
+        [Test]
+        public void ModifyAnimatorController_AddAnyStateTransition_MissingLayerName_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.AddAnyStateTransition,
+                        destinationStateName = "Death"
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("layerName", response.errors![0]);
             }).Execute();
         }
 
@@ -1013,6 +1132,54 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 
                 Assert.IsNotNull(response.errors);
                 StringAssert.Contains("speed", response.errors![0]);
+            }).Execute();
+        }
+
+        [Test]
+        public void ModifyAnimatorController_SetStateSpeed_MissingLayerName_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.SetStateSpeed,
+                        stateName = "Run",
+                        speed = 2.0f
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("layerName", response.errors![0]);
+            }).Execute();
+        }
+
+        [Test]
+        public void ModifyAnimatorController_SetStateSpeed_MissingStateName_ReturnsError()
+        {
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
+            {
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
+                var mods = new[]
+                {
+                    new AnimatorModification
+                    {
+                        type = AnimatorModificationType.SetStateSpeed,
+                        layerName = BaseLayerName,
+                        speed = 2.0f
+                    }
+                };
+
+                var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
+
+                Assert.IsNotNull(response.errors);
+                StringAssert.Contains("stateName", response.errors![0]);
             }).Execute();
         }
 

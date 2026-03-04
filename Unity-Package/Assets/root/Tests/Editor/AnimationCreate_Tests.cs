@@ -166,7 +166,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         }
 
         [Test]
-        public void CreateAnimationClips_PathAlreadyExists_CreatesNewAsset()
+        public void CreateAnimationClips_PathAlreadyExists_OverwritesAndReturnsAssetInfo()
         {
             var folderEx = new CreateFolderExecutor("Assets", "Tests");
             folderEx.AddChild(() =>
@@ -176,10 +176,19 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 // Create once
                 var response1 = AnimationTools.CreateAnimationClips(new[] { assetPath });
                 Assert.IsNull(response1.errors);
+                var originalInstanceId = response1.createdAssets![0].instanceId;
 
-                // Create again - should overwrite/succeed
+                // Create again - should overwrite and succeed
                 var response2 = AnimationTools.CreateAnimationClips(new[] { assetPath });
                 Assert.IsNotNull(response2);
+                Assert.IsNull(response2.errors, "Overwriting an existing asset should not produce errors");
+                Assert.IsNotNull(response2.createdAssets);
+                Assert.AreEqual(1, response2.createdAssets!.Count);
+                Assert.AreEqual(assetPath, response2.createdAssets[0].path);
+                Assert.NotZero(response2.createdAssets[0].instanceId);
+
+                var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
+                Assert.IsNotNull(clip, "Asset should still exist after overwrite");
             }).Execute();
         }
     }
