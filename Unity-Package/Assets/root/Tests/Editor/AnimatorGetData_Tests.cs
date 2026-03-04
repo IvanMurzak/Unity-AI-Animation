@@ -48,7 +48,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ValidController_ReturnsBasicData()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -64,7 +64,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_NewController_HasBaseLayer()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -79,7 +79,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ControllerWithAddedParameter_ReturnsParameter()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -100,7 +100,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ControllerWithMultipleParameters_ReturnsAllParameters()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -126,7 +126,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ControllerWithState_ReturnsStateInLayer()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -151,7 +151,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_LayerInfo_IncludesDefaultStateName()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");

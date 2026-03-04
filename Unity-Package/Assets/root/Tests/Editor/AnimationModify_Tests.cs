@@ -44,7 +44,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_NullModifications_ThrowsArgumentNullException()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -57,7 +57,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_EmptyModifications_ThrowsArgumentException()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -79,7 +79,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetCurve_Valid_CurveApplied()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -115,7 +115,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetCurve_MissingComponentType_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -140,7 +140,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetCurve_MissingPropertyName_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -165,7 +165,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetCurve_MissingKeyframes_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -191,7 +191,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetCurve_InvalidComponentType_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -218,7 +218,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_RemoveCurve_ExistingCurve_CurveRemoved()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -253,7 +253,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_RemoveCurve_MissingComponentType_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -276,7 +276,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_RemoveCurve_MissingPropertyName_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -301,7 +301,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_ClearCurves_RemovesAllCurves()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -327,7 +327,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetFrameRate_Valid_FrameRateUpdated()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -347,7 +347,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetFrameRate_MissingValue_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -369,7 +369,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetWrapMode_Valid_WrapModeUpdated()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -389,7 +389,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetWrapMode_MissingValue_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -410,7 +410,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetLegacy_True_LegacyFlagSet()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -430,7 +430,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetLegacy_False_LegacyFlagCleared()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -455,7 +455,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_SetLegacy_MissingValue_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -476,7 +476,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_AddEvent_Valid_EventAdded()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -511,7 +511,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_AddEvent_MissingTime_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -535,7 +535,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_AddEvent_MissingFunctionName_ReturnsError()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -561,7 +561,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_ClearEvents_RemovesAllEvents()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -590,7 +590,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_MultipleModifications_AllApplied()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -637,7 +637,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_MultipleModificationsWithOneInvalid_AppliesValidAndCollectsErrors()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -662,7 +662,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_Response_ContainsModifiedAssetInfo()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);

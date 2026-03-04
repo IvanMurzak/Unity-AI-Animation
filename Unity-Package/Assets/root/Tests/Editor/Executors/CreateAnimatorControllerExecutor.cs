@@ -13,22 +13,22 @@
 using System;
 using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 using UnityEditor;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
-    public class AnimationClipExecutor : BaseCreateAssetExecutor<AnimationClip>
+    public class CreateAnimatorControllerExecutor : BaseCreateAssetExecutor<AnimatorController>
     {
-        public AnimationClipExecutor(string clipName, params string[] folders) : base(clipName, folders)
+        public CreateAnimatorControllerExecutor(string controllerName, params string[] folders) : base(controllerName, folders)
         {
-            if (!clipName.EndsWith(".anim", StringComparison.OrdinalIgnoreCase))
-                throw new ArgumentException("Clip name should not contain a file extension.", nameof(clipName));
+            if (!controllerName.EndsWith(".controller", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("Controller name should not contain a file extension.", nameof(controllerName));
 
             SetAction(() =>
             {
-                Debug.Log($"Creating AnimationClip at path: {AssetPath}");
-                Asset = new AnimationClip();
-                AssetDatabase.CreateAsset(Asset, AssetPath);
+                Debug.Log($"Creating AnimatorController at path: {AssetPath}");
+                Asset = AnimatorController.CreateAnimatorControllerAtPath(AssetPath);
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             });
         }

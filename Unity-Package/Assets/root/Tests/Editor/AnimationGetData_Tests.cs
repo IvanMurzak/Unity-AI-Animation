@@ -48,7 +48,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ValidEmptyClip_ReturnsBasicData()
         {
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animRef = new AssetObjectRef(clipEx.AssetPath);
@@ -68,7 +68,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ClipWithCustomFrameRate_ReturnsCorrectFrameRate()
         {
-            var clipEx = new AnimationClipExecutor("animation.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("animation.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -86,7 +86,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ClipWithWrapMode_ReturnsCorrectWrapMode()
         {
-            var clipEx = new AnimationClipExecutor("animation.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("animation.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -104,7 +104,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ClipWithCurve_ReturnsCurveBindings()
         {
-            var clipEx = new AnimationClipExecutor("animation.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("animation.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -127,7 +127,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ClipWithEvent_ReturnsEventData()
         {
-            var clipEx = new AnimationClipExecutor("animation.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("animation.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
@@ -160,7 +160,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_ClipWithLegacyFlag_ReturnsLegacyTrue()
         {
-            var clipEx = new AnimationClipExecutor("animation.anim", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("animation.anim", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");

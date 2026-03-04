@@ -47,7 +47,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_NullModifications_ThrowsArgumentNullException()
         {
-            var clipEx = new AnimatorControllerExecutor("animation.controller", "Assets", "Tests");
+            var clipEx = new CreateAnimatorControllerExecutor("animation.controller", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(clipEx.AssetPath);
@@ -59,7 +59,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_EmptyModifications_ThrowsArgumentException()
         {
-            var clipEx = new AnimatorControllerExecutor("animation.controller", "Assets", "Tests");
+            var clipEx = new CreateAnimatorControllerExecutor("animation.controller", "Assets", "Tests");
             clipEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(clipEx.AssetPath);
@@ -80,7 +80,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_Float_ParameterAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -109,7 +109,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_Int_ParameterAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -137,7 +137,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_Bool_ParameterAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -165,7 +165,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_Trigger_ParameterAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -191,7 +191,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_MissingName_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -214,7 +214,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_MissingType_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -237,7 +237,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddParameter_InvalidType_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -262,7 +262,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveParameter_Valid_ParameterRemoved()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -291,7 +291,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveParameter_MissingName_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -312,7 +312,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddLayer_Valid_LayerAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -337,7 +337,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddLayer_MissingName_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -358,7 +358,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveLayer_Valid_LayerRemoved()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -392,7 +392,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveLayer_MissingName_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -411,7 +411,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveLayer_NonExistentLayer_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -435,7 +435,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddState_Valid_StateAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -461,7 +461,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddState_MissingLayerName_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -484,7 +484,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddState_MissingStateName_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -507,7 +507,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddState_NonExistentLayer_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -532,7 +532,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveState_Valid_StateRemoved()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -568,7 +568,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_SetDefaultState_Valid_DefaultStateSet()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -604,7 +604,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddTransition_Valid_TransitionAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -644,7 +644,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddTransition_WithCondition_TransitionHasCondition()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -693,7 +693,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddTransition_MissingSourceState_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -717,7 +717,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddTransition_MissingDestinationState_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -743,7 +743,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_RemoveTransition_Valid_TransitionRemoved()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 // Setup: create states and transition
@@ -784,7 +784,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddAnyStateTransition_Valid_TransitionAdded()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -820,7 +820,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_AddAnyStateTransition_MissingDestination_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -845,8 +845,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_SetStateMotion_WithExistingClip_MotionSet()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
-            var clipEx = new AnimationClipExecutor("TestClip.anim", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var clipEx = new CreateAnimationClipExecutor("TestClip.anim", "Assets", "Tests");
             controllerEx.AddChild(clipEx);
             clipEx.AddChild(() =>
             {
@@ -884,7 +884,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_SetStateMotion_WithNonExistentMotion_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -916,7 +916,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_SetStateMotion_MissingMotionPath_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -951,7 +951,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_SetStateSpeed_Valid_SpeedSet()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -986,7 +986,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_SetStateSpeed_MissingSpeed_ReturnsError()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
@@ -1021,7 +1021,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_Response_ContainsModifiedAssetInfo()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
@@ -1049,7 +1049,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_ComplexSetup_AllModificationsApplied()
         {
-            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            var controllerEx = new CreateAnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
             controllerEx.AddChild(() =>
             {
                 var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
