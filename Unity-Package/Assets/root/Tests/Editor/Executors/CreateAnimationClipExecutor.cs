@@ -22,7 +22,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public CreateAnimationClipExecutor(string clipName, params string[] folders) : base(clipName, folders)
         {
             if (!clipName.EndsWith(".anim", StringComparison.OrdinalIgnoreCase))
-                throw new ArgumentException("Clip name should not contain a file extension.", nameof(clipName));
+                throw new ArgumentException("Clip name must end with the '.anim' file extension.", nameof(clipName));
 
             SetAction(() =>
             {
