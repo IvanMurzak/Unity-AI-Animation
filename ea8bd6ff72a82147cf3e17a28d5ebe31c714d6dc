@@ -1,0 +1,23 @@
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animation.Modify.cs
+  41cb583031edf24c 196,198-214,217,224,234
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "ea8bd6ff72a82147cf3e17a28d5ebe31c714d6dc",
+  "prompts": {
+    "41cb583031edf24c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "313f478d-94a6-4b38-a95e-7b99b95e102e",
+        "model": "claude-haiku-4-5-20251001"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>",
+      "messages": [],
+      "total_additions": 273,
+      "total_deletions": 259,
+      "accepted_lines": 66,
+      "overriden_lines": 0
+    }
+  }
+}
