@@ -21,8 +21,6 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
     [TestFixture]
     public class AnimatorCreate_Tests
     {
-        private const string TestFolder = "Assets/Tests/MCP/Animator/CreateTests";
-
         [Test]
         public void CreateAnimatorControllers_NullPaths_ThrowsArgumentNullException()
         {
@@ -40,51 +38,49 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimatorControllers_ValidPath_CreatesAssetAndReturnsInfo()
         {
-            var assetPath = $"{TestFolder}/TestController.controller";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
-            folderExecutor.Nest(new AnimatorControllerExecutor(assetPath));
-            folderExecutor.Execute();
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
+            {
+                var assetPath = $"{folderEx.FolderPath}/TestController.controller";
 
-            var response = AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
+                var response = AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
 
-            Assert.IsNotNull(response);
-            Assert.IsNull(response.errors, "Expected no errors for valid path");
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(1, response.createdAssets!.Count);
-            Assert.AreEqual(assetPath, response.createdAssets[0].path);
-            Assert.AreEqual("TestController", response.createdAssets[0].name);
-            Assert.NotZero(response.createdAssets[0].instanceId);
+                Assert.IsNotNull(response);
+                Assert.IsNull(response.errors, "Expected no errors for valid path");
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(1, response.createdAssets!.Count);
+                Assert.AreEqual(assetPath, response.createdAssets[0].path);
+                Assert.AreEqual("TestController", response.createdAssets[0].name);
+                Assert.NotZero(response.createdAssets[0].instanceId);
 
-            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
-            Assert.IsNotNull(controller, "AnimatorController should exist at given path");
+                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
+                Assert.IsNotNull(controller, "AnimatorController should exist at given path");
+            }).Execute();
         }
 
         [Test]
         public void CreateAnimatorControllers_MultiplePaths_CreatesAllAssets()
         {
-            var paths = new[]
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
             {
-                $"{TestFolder}/Controller1.controller",
-                $"{TestFolder}/Controller2.controller",
-                $"{TestFolder}/Controller3.controller"
-            };
+                var paths = new[]
+                {
+                    $"{folderEx.FolderPath}/Controller1.controller",
+                    $"{folderEx.FolderPath}/Controller2.controller",
+                    $"{folderEx.FolderPath}/Controller3.controller"
+                };
 
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
-            foreach (var p in paths)
-            {
-                folderExecutor.Nest(new AnimatorControllerExecutor(p));
-            }
-            folderExecutor.Execute();
+                var response = AnimatorTools.CreateAnimatorControllers(paths);
 
-            var response = AnimatorTools.CreateAnimatorControllers(paths);
+                Assert.IsNotNull(response);
+                Assert.IsNull(response.errors, "Expected no errors");
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(3, response.createdAssets!.Count);
 
-            Assert.IsNotNull(response);
-            Assert.IsNull(response.errors, "Expected no errors");
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(3, response.createdAssets!.Count);
-
-            foreach (var path in paths)
-                Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<AnimatorController>(path), $"Asset should exist at {path}");
+                foreach (var path in paths)
+                    Assert.IsNotNull(AssetDatabase.LoadAssetAtPath<AnimatorController>(path), $"Asset should exist at {path}");
+            }).Execute();
         }
 
         [Test]
@@ -101,7 +97,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimatorControllers_PathWithoutControllerExtension_ReturnsError()
         {
-            var response = AnimatorTools.CreateAnimatorControllers(new[] { $"{TestFolder}/TestController.txt" });
+            var response = AnimatorTools.CreateAnimatorControllers(new[] { "Assets/Tests/TestController.txt" });
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.errors);
@@ -123,60 +119,63 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimatorControllers_NestedFolderPath_CreatesFoldersAndAsset()
         {
-            var assetPath = $"{TestFolder}/SubFolder/Deep/Controller.controller";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests", "SubFolder", "Deep");
-            folderExecutor.Nest(new AnimatorControllerExecutor(assetPath));
-            folderExecutor.Execute();
+            var folderEx = new CreateFolderExecutor("Assets", "Tests", "SubFolder", "Deep");
+            folderEx.AddChild(() =>
+            {
+                var assetPath = $"{folderEx.FolderPath}/Controller.controller";
 
-            var response = AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
+                var response = AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
 
-            Assert.IsNotNull(response);
-            Assert.IsNull(response.errors);
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(1, response.createdAssets!.Count);
+                Assert.IsNotNull(response);
+                Assert.IsNull(response.errors);
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(1, response.createdAssets!.Count);
 
-            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
-            Assert.IsNotNull(controller, "Controller should exist at nested path");
+                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
+                Assert.IsNotNull(controller, "Controller should exist at nested path");
+            }).Execute();
         }
 
         [Test]
         public void CreateAnimatorControllers_MixedValidAndInvalid_CreatesValidReturnsErrorsForInvalid()
         {
-            var validPath = $"{TestFolder}/ValidController.controller";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
-            folderExecutor.Nest(new AnimatorControllerExecutor(validPath));
-            folderExecutor.Execute();
-
-            var response = AnimatorTools.CreateAnimatorControllers(new[]
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
             {
-                validPath,
-                "NoPrefixController.controller",
-                $"{TestFolder}/WrongExt.anim",
-                string.Empty
-            });
+                var validPath = $"{folderEx.FolderPath}/ValidController.controller";
 
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(1, response.createdAssets!.Count);
-            Assert.AreEqual(validPath, response.createdAssets[0].path);
+                var response = AnimatorTools.CreateAnimatorControllers(new[]
+                {
+                    validPath,
+                    "NoPrefixController.controller",
+                    $"{folderEx.FolderPath}/WrongExt.anim",
+                    string.Empty
+                });
 
-            Assert.IsNotNull(response.errors);
-            Assert.AreEqual(3, response.errors!.Count);
+                Assert.IsNotNull(response);
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(1, response.createdAssets!.Count);
+                Assert.AreEqual(validPath, response.createdAssets[0].path);
+
+                Assert.IsNotNull(response.errors);
+                Assert.AreEqual(3, response.errors!.Count);
+            }).Execute();
         }
 
         [Test]
         public void CreateAnimatorControllers_NewController_HasDefaultBaseLayer()
         {
-            var assetPath = $"{TestFolder}/NewController.controller";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
-            folderExecutor.Nest(new AnimatorControllerExecutor(assetPath));
-            folderExecutor.Execute();
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
+            {
+                var assetPath = $"{folderEx.FolderPath}/NewController.controller";
 
-            AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
+                AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
 
-            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
-            Assert.IsNotNull(controller);
-            Assert.GreaterOrEqual(controller!.layers.Length, 1, "New controller should have at least Base Layer");
+                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
+                Assert.IsNotNull(controller);
+                Assert.GreaterOrEqual(controller!.layers.Length, 1, "New controller should have at least Base Layer");
+            }).Execute();
         }
     }
 }

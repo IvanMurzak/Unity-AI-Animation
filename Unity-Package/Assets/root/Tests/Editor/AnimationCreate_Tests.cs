@@ -21,8 +21,6 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
     [TestFixture]
     public class AnimationCreate_Tests
     {
-        private const string TestFolder = "Assets/Tests/MCP/Animation/CreateTests";
-
         [Test]
         public void CreateAnimationClips_NullPaths_ThrowsArgumentNullException()
         {
@@ -40,48 +38,52 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimationClips_ValidPath_CreatesAssetAndReturnsInfo()
         {
-            var assetPath = $"{TestFolder}/TestClip.anim";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
-            folderExecutor.Execute();
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
+            {
+                var assetPath = $"{folderEx.FolderPath}/TestClip.anim";
 
-            var response = AnimationTools.CreateAnimationClips(new[] { assetPath });
+                var response = AnimationTools.CreateAnimationClips(new[] { assetPath });
 
-            Assert.IsNotNull(response);
-            Assert.IsNull(response.errors, "Expected no errors for valid path");
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(1, response.createdAssets!.Count);
-            Assert.AreEqual(assetPath, response.createdAssets[0].path);
-            Assert.AreEqual("TestClip", response.createdAssets[0].name);
-            Assert.NotZero(response.createdAssets[0].instanceId);
+                Assert.IsNotNull(response);
+                Assert.IsNull(response.errors, "Expected no errors for valid path");
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(1, response.createdAssets!.Count);
+                Assert.AreEqual(assetPath, response.createdAssets[0].path);
+                Assert.AreEqual("TestClip", response.createdAssets[0].name);
+                Assert.NotZero(response.createdAssets[0].instanceId);
 
-            var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
-            Assert.IsNotNull(clip, "Asset should exist at the given path");
+                var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
+                Assert.IsNotNull(clip, "Asset should exist at the given path");
+            }).Execute();
         }
 
         [Test]
         public void CreateAnimationClips_MultiplePaths_CreatesAllAssets()
         {
-            var paths = new[]
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
             {
-                $"{TestFolder}/Clip1.anim",
-                $"{TestFolder}/Clip2.anim",
-                $"{TestFolder}/Clip3.anim"
-            };
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
-            folderExecutor.Execute();
+                var paths = new[]
+                {
+                    $"{folderEx.FolderPath}/Clip1.anim",
+                    $"{folderEx.FolderPath}/Clip2.anim",
+                    $"{folderEx.FolderPath}/Clip3.anim"
+                };
 
-            var response = AnimationTools.CreateAnimationClips(paths);
+                var response = AnimationTools.CreateAnimationClips(paths);
 
-            Assert.IsNotNull(response);
-            Assert.IsNull(response.errors, "Expected no errors for valid paths");
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(3, response.createdAssets!.Count);
+                Assert.IsNotNull(response);
+                Assert.IsNull(response.errors, "Expected no errors for valid paths");
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(3, response.createdAssets!.Count);
 
-            foreach (var path in paths)
-            {
-                var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
-                Assert.IsNotNull(clip, $"Asset should exist at {path}");
-            }
+                foreach (var path in paths)
+                {
+                    var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(path);
+                    Assert.IsNotNull(clip, $"Asset should exist at {path}");
+                }
+            }).Execute();
         }
 
         [Test]
@@ -98,7 +100,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimationClips_PathWithoutAnimExtension_ReturnsError()
         {
-            var response = AnimationTools.CreateAnimationClips(new[] { $"{TestFolder}/TestClip.txt" });
+            var response = AnimationTools.CreateAnimationClips(new[] { "Assets/Tests/TestClip.txt" });
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.errors);
@@ -120,60 +122,65 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimationClips_NestedFolderPath_CreatesFoldersAndAsset()
         {
-            var assetPath = $"{TestFolder}/SubFolder/Nested/DeepClip.anim";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests", "SubFolder", "Nested");
-            folderExecutor.Execute();
+            var folderEx = new CreateFolderExecutor("Assets", "Tests", "SubFolder", "Nested");
+            folderEx.AddChild(() =>
+            {
+                var assetPath = $"{folderEx.FolderPath}/DeepClip.anim";
 
-            var response = AnimationTools.CreateAnimationClips(new[] { assetPath });
+                var response = AnimationTools.CreateAnimationClips(new[] { assetPath });
 
-            Assert.IsNotNull(response);
-            Assert.IsNull(response.errors, "Expected no errors for nested path");
-            Assert.IsNotNull(response.createdAssets);
-            Assert.AreEqual(1, response.createdAssets!.Count);
+                Assert.IsNotNull(response);
+                Assert.IsNull(response.errors, "Expected no errors for nested path");
+                Assert.IsNotNull(response.createdAssets);
+                Assert.AreEqual(1, response.createdAssets!.Count);
 
-            var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
-            Assert.IsNotNull(clip, "Asset should exist at nested path");
+                var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
+                Assert.IsNotNull(clip, "Asset should exist at nested path");
+            }).Execute();
         }
 
         [Test]
         public void CreateAnimationClips_MixedValidAndInvalid_CreatesValidReturnsErrorsForInvalid()
         {
-            var validPath = $"{TestFolder}/ValidClip.anim";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
-            folderExecutor.Nest(new AnimationClipExecutor(validPath));
-            folderExecutor.Execute();
-
-            var response = AnimationTools.CreateAnimationClips(new[]
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
             {
-                validPath,
-                "BadPath/NoPrefixClip.anim",
-                $"{TestFolder}/WrongExtension.txt",
-                string.Empty
-            });
+                var validPath = $"{folderEx.FolderPath}/ValidClip.anim";
 
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.createdAssets, "Should have created the valid asset");
-            Assert.AreEqual(1, response.createdAssets!.Count);
-            Assert.AreEqual(validPath, response.createdAssets[0].path);
+                var response = AnimationTools.CreateAnimationClips(new[]
+                {
+                    validPath,
+                    "BadPath/NoPrefixClip.anim",
+                    $"{folderEx.FolderPath}/WrongExtension.txt",
+                    string.Empty
+                });
 
-            Assert.IsNotNull(response.errors, "Should have errors for the invalid paths");
-            Assert.AreEqual(3, response.errors!.Count);
+                Assert.IsNotNull(response);
+                Assert.IsNotNull(response.createdAssets, "Should have created the valid asset");
+                Assert.AreEqual(1, response.createdAssets!.Count);
+                Assert.AreEqual(validPath, response.createdAssets[0].path);
+
+                Assert.IsNotNull(response.errors, "Should have errors for the invalid paths");
+                Assert.AreEqual(3, response.errors!.Count);
+            }).Execute();
         }
 
         [Test]
         public void CreateAnimationClips_PathAlreadyExists_CreatesNewAsset()
         {
-            var assetPath = $"{TestFolder}/ExistingClip.anim";
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
-            folderExecutor.Execute();
+            var folderEx = new CreateFolderExecutor("Assets", "Tests");
+            folderEx.AddChild(() =>
+            {
+                var assetPath = $"{folderEx.FolderPath}/ExistingClip.anim";
 
-            // Create once
-            var response1 = AnimationTools.CreateAnimationClips(new[] { assetPath });
-            Assert.IsNull(response1.errors);
+                // Create once
+                var response1 = AnimationTools.CreateAnimationClips(new[] { assetPath });
+                Assert.IsNull(response1.errors);
 
-            // Create again - should overwrite/succeed
-            var response2 = AnimationTools.CreateAnimationClips(new[] { assetPath });
-            Assert.IsNotNull(response2);
+                // Create again - should overwrite/succeed
+                var response2 = AnimationTools.CreateAnimationClips(new[] { assetPath });
+                Assert.IsNotNull(response2);
+            }).Execute();
         }
     }
 }

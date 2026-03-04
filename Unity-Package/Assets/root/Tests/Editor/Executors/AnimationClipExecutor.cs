@@ -10,52 +10,27 @@
 
 #nullable enable
 
-using System.IO;
+using System;
+using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 using UnityEditor;
 using UnityEngine;
-using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
-    /// <summary>
-    /// Test executor that manages an AnimationClip asset lifecycle via LazyNodeExecutor.
-    /// Creates the clip when SetAction is called, deletes it in PostExecute.
-    /// </summary>
-    public class AnimationClipExecutor : LazyNodeExecutor
+    public class AnimationClipExecutor : BaseCreateAssetExecutor<AnimationClip>
     {
-        public string AssetPath { get; }
-        public AnimationClip? Clip => AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetPath);
-
-        public AnimationClipExecutor(string assetPath)
+        public AnimationClipExecutor(string clipName, params string[] folders) : base(clipName, folders)
         {
-            AssetPath = assetPath;
-            SetAction(() => CreateClip());
-        }
+            if (!clipName.EndsWith(".anim", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("Clip name should not contain a file extension.", nameof(clipName));
 
-        private void CreateClip()
-        {
-            if (AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetPath) == null)
+            SetAction(() =>
             {
-                var clip = new AnimationClip { name = Path.GetFileNameWithoutExtension(AssetPath) };
-                AssetDatabase.CreateAsset(clip, AssetPath);
-                AssetDatabase.SaveAssets();
+                Debug.Log($"Creating AnimationClip at path: {AssetPath}");
+                Asset = new AnimationClip();
+                AssetDatabase.CreateAsset(Asset, AssetPath);
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
-        }
-
-        protected override void PostExecute(object? input = null)
-        {
-            DeleteClip();
-            base.PostExecute(input);
-        }
-
-        private void DeleteClip()
-        {
-            if (!string.IsNullOrEmpty(AssetPath) && AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetPath) != null)
-            {
-                AssetDatabase.DeleteAsset(AssetPath);
-                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
+            });
         }
     }
 }

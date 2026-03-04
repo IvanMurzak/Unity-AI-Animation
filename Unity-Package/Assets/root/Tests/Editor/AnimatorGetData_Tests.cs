@@ -15,18 +15,13 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using com.IvanMurzak.McpPlugin;
 using com.IvanMurzak.Unity.MCP.Runtime.Data;
-using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
     [TestFixture]
     public class AnimatorGetData_Tests
     {
-        private const string TestFolder = "Assets/Tests/MCP/Animator/GetDataTests";
-        private const string TestControllerPath = TestFolder + "/TestController.controller";
-
         [Test]
         public void GetData_NullRef_ThrowsArgumentNullException()
         {
@@ -47,87 +42,76 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void GetData_NonExistentAsset_ThrowsException()
         {
             Assert.Throws<ArgumentException>(() =>
-                AnimatorTools.GetData(new AssetObjectRef($"{TestFolder}/NonExistent.controller")));
+                AnimatorTools.GetData(new AssetObjectRef("Assets/Tests/NonExistent.controller")));
         }
 
         [Test]
         public void GetData_ValidController_ReturnsBasicData()
         {
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "GetDataTests");
-            var controllerExecutor = new AnimatorControllerExecutor(TestControllerPath);
-            folderExecutor.Nest(controllerExecutor);
-            folderExecutor.Nest(new LazyNodeExecutor().SetAction(() =>
+            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
             {
-                var animatorRef = new AssetObjectRef(TestControllerPath);
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
                 var response = AnimatorTools.GetData(animatorRef);
 
                 Assert.IsNotNull(response);
                 Assert.AreEqual("TestController", response.name);
                 Assert.IsNotNull(response.parameters);
                 Assert.IsNotNull(response.layers);
-            }));
-            folderExecutor.Execute();
+            }).Execute();
         }
 
         [Test]
         public void GetData_NewController_HasBaseLayer()
         {
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "GetDataTests");
-            var controllerExecutor = new AnimatorControllerExecutor(TestControllerPath);
-            folderExecutor.Nest(controllerExecutor);
-            folderExecutor.Nest(new LazyNodeExecutor().SetAction(() =>
+            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
             {
-                var animatorRef = new AssetObjectRef(TestControllerPath);
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
                 var response = AnimatorTools.GetData(animatorRef);
 
                 Assert.IsNotNull(response.layers);
                 Assert.GreaterOrEqual(response.layers!.Count, 1, "New controller should have Base Layer");
                 Assert.AreEqual("Base Layer", response.layers[0].name);
-            }));
-            folderExecutor.Execute();
+            }).Execute();
         }
 
         [Test]
         public void GetData_ControllerWithAddedParameter_ReturnsParameter()
         {
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "GetDataTests");
-            var controllerExecutor = new AnimatorControllerExecutor(TestControllerPath);
-            folderExecutor.Nest(controllerExecutor);
-            folderExecutor.Nest(new LazyNodeExecutor().SetAction(() =>
+            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
             {
-                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(TestControllerPath);
-                controller!.AddParameter("Speed", AnimatorControllerParameterType.Float);
+                var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
+                controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
                 EditorUtility.SetDirty(controller);
                 AssetDatabase.SaveAssets();
 
-                var animatorRef = new AssetObjectRef(TestControllerPath);
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
                 var response = AnimatorTools.GetData(animatorRef);
 
                 Assert.IsNotNull(response.parameters);
                 Assert.AreEqual(1, response.parameters!.Count);
                 Assert.AreEqual("Speed", response.parameters[0].name);
                 Assert.AreEqual("Float", response.parameters[0].type);
-            }));
-            folderExecutor.Execute();
+            }).Execute();
         }
 
         [Test]
         public void GetData_ControllerWithMultipleParameters_ReturnsAllParameters()
         {
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "GetDataTests");
-            var controllerExecutor = new AnimatorControllerExecutor(TestControllerPath);
-            folderExecutor.Nest(controllerExecutor);
-            folderExecutor.Nest(new LazyNodeExecutor().SetAction(() =>
+            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
             {
-                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(TestControllerPath);
-                controller!.AddParameter("Speed", AnimatorControllerParameterType.Float);
-                controller!.AddParameter("IsJumping", AnimatorControllerParameterType.Bool);
-                controller!.AddParameter("Score", AnimatorControllerParameterType.Int);
-                controller!.AddParameter("Attack", AnimatorControllerParameterType.Trigger);
+                var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
+                controller.AddParameter("Speed", AnimatorControllerParameterType.Float);
+                controller.AddParameter("IsJumping", AnimatorControllerParameterType.Bool);
+                controller.AddParameter("Score", AnimatorControllerParameterType.Int);
+                controller.AddParameter("Attack", AnimatorControllerParameterType.Trigger);
                 EditorUtility.SetDirty(controller);
                 AssetDatabase.SaveAssets();
 
-                var animatorRef = new AssetObjectRef(TestControllerPath);
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
                 var response = AnimatorTools.GetData(animatorRef);
 
                 Assert.IsNotNull(response.parameters);
@@ -136,20 +120,17 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 var paramNames = new System.Collections.Generic.HashSet<string>(new[] { "Speed", "IsJumping", "Score", "Attack" });
                 foreach (var param in response.parameters)
                     Assert.IsTrue(paramNames.Contains(param.name), $"Unexpected param: {param.name}");
-            }));
-            folderExecutor.Execute();
+            }).Execute();
         }
 
         [Test]
         public void GetData_ControllerWithState_ReturnsStateInLayer()
         {
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "GetDataTests");
-            var controllerExecutor = new AnimatorControllerExecutor(TestControllerPath);
-            folderExecutor.Nest(controllerExecutor);
-            folderExecutor.Nest(new LazyNodeExecutor().SetAction(() =>
+            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
             {
-                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(TestControllerPath);
-                var layer = controller!.layers[0];
+                var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
+                var layer = controller.layers[0];
                 layer.stateMachine.AddState("Idle");
                 // Need to reassign layers for changes to take effect
                 var layers = controller.layers;
@@ -157,27 +138,24 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 EditorUtility.SetDirty(controller);
                 AssetDatabase.SaveAssets();
 
-                var animatorRef = new AssetObjectRef(TestControllerPath);
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
                 var response = AnimatorTools.GetData(animatorRef);
 
                 Assert.IsNotNull(response.layers);
                 var baseLayer = response.layers![0];
                 Assert.IsNotNull(baseLayer.states);
                 Assert.IsTrue(baseLayer.states!.Count >= 1, "Should have at least 'Idle' state");
-            }));
-            folderExecutor.Execute();
+            }).Execute();
         }
 
         [Test]
         public void GetData_LayerInfo_IncludesDefaultStateName()
         {
-            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "GetDataTests");
-            var controllerExecutor = new AnimatorControllerExecutor(TestControllerPath);
-            folderExecutor.Nest(controllerExecutor);
-            folderExecutor.Nest(new LazyNodeExecutor().SetAction(() =>
+            var controllerEx = new AnimatorControllerExecutor("TestController.controller", "Assets", "Tests");
+            controllerEx.AddChild(() =>
             {
-                var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(TestControllerPath);
-                var layer = controller!.layers[0];
+                var controller = controllerEx.Asset ?? throw new InvalidOperationException("Controller should have been created by executor");
+                var layer = controller.layers[0];
                 var idleState = layer.stateMachine.AddState("Idle");
                 layer.stateMachine.defaultState = idleState;
                 var layers = controller.layers;
@@ -185,13 +163,12 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 EditorUtility.SetDirty(controller);
                 AssetDatabase.SaveAssets();
 
-                var animatorRef = new AssetObjectRef(TestControllerPath);
+                var animatorRef = new AssetObjectRef(controllerEx.AssetPath);
                 var response = AnimatorTools.GetData(animatorRef);
 
                 var baseLayer = response.layers![0];
                 Assert.AreEqual("Idle", baseLayer.defaultStateName);
-            }));
-            folderExecutor.Execute();
+            }).Execute();
         }
     }
 }

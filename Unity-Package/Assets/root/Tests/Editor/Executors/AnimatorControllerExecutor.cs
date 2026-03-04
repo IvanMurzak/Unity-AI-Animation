@@ -10,50 +10,27 @@
 
 #nullable enable
 
-using System.IO;
+using System;
+using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 using UnityEditor;
 using UnityEditor.Animations;
-using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
+using UnityEngine;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
-    /// <summary>
-    /// Test executor that manages an AnimatorController asset lifecycle via LazyNodeExecutor.
-    /// Creates the controller when SetAction is called, deletes it in PostExecute.
-    /// </summary>
-    public class AnimatorControllerExecutor : LazyNodeExecutor
+    public class AnimatorControllerExecutor : BaseCreateAssetExecutor<AnimatorController>
     {
-        public string AssetPath { get; }
-        public AnimatorController? Controller => AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetPath);
-
-        public AnimatorControllerExecutor(string assetPath)
+        public AnimatorControllerExecutor(string controllerName, params string[] folders) : base(controllerName, folders)
         {
-            AssetPath = assetPath;
-            SetAction(() => CreateController());
-        }
+            if (!controllerName.EndsWith(".controller", StringComparison.OrdinalIgnoreCase))
+                throw new ArgumentException("Controller name should not contain a file extension.", nameof(controllerName));
 
-        private void CreateController()
-        {
-            if (AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetPath) == null)
+            SetAction(() =>
             {
-                AnimatorController.CreateAnimatorControllerAtPath(AssetPath);
+                Debug.Log($"Creating AnimatorController at path: {AssetPath}");
+                Asset = AnimatorController.CreateAnimatorControllerAtPath(AssetPath);
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
-        }
-
-        protected override void PostExecute(object? input = null)
-        {
-            DeleteController();
-            base.PostExecute(input);
-        }
-
-        private void DeleteController()
-        {
-            if (!string.IsNullOrEmpty(AssetPath) && AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetPath) != null)
-            {
-                AssetDatabase.DeleteAsset(AssetPath);
-                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
+            });
         }
     }
 }
