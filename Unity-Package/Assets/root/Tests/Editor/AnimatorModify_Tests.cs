@@ -15,6 +15,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
+using UnityEngine;
 using com.IvanMurzak.McpPlugin;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
