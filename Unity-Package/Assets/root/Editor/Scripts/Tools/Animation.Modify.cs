@@ -177,7 +177,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                 curve.AddKey(keyframe);
             }
 
-            clip.SetCurve(mod.relativePath ?? "", type, mod.propertyName, curve);
+            clip.SetCurve(mod.relativePath ?? string.Empty, type, mod.propertyName, curve);
         }
 
         private static void ApplyRemoveCurve(AnimationClip clip, AnimationModification mod)
@@ -191,7 +191,49 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             if (type == null)
                 throw new Exception($"Could not resolve component type: {mod.componentType}");
 
-            clip.SetCurve(mod.relativePath ?? "", type, mod.propertyName, null);
+            var relativePath = mod.relativePath ?? string.Empty;
+
+            // Get all curve bindings and curves before clearing
+            var bindings = AnimationUtility.GetCurveBindings(clip);
+            var curveData = new Dictionary<EditorCurveBinding, AnimationCurve>();
+            foreach (var binding in bindings)
+            {
+                var curve = AnimationUtility.GetEditorCurve(clip, binding);
+                if (curve != null)
+                    curveData[binding] = curve;
+            }
+
+            var objectBindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+            var objectData = new Dictionary<EditorCurveBinding, ObjectReferenceKeyframe[]>();
+            foreach (var binding in objectBindings)
+            {
+                var keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
+                if (keyframes != null && keyframes.Length > 0)
+                    objectData[binding] = keyframes;
+            }
+
+            clip.ClearCurves();
+
+            // Re-add all curves except the one to remove
+            foreach (var binding in bindings)
+            {
+                // Skip the binding we want to remove
+                if (binding.path == relativePath && binding.type == type && binding.propertyName == mod.propertyName)
+                    continue;
+
+                if (curveData.TryGetValue(binding, out var curve))
+                    AnimationUtility.SetEditorCurve(clip, binding, curve);
+            }
+
+            foreach (var binding in objectBindings)
+            {
+                // Skip the binding we want to remove
+                if (binding.path == relativePath && binding.type == type && binding.propertyName == mod.propertyName)
+                    continue;
+
+                if (objectData.TryGetValue(binding, out var keyframes))
+                    AnimationUtility.SetObjectReferenceCurve(clip, binding, keyframes);
+            }
         }
 
         private static void ApplyAddEvent(List<AnimationEvent> eventsList, AnimationModification mod)
@@ -205,7 +247,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             {
                 time = mod.time.Value,
                 functionName = mod.functionName,
-                stringParameter = mod.stringParameter ?? "",
+                stringParameter = mod.stringParameter ?? string.Empty,
                 floatParameter = mod.floatParameter ?? 0f,
                 intParameter = mod.intParameter ?? 0
             };
