@@ -11,10 +11,10 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
@@ -22,24 +22,6 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
     public class AnimationCreate_Tests
     {
         private const string TestFolder = "Assets/Tests/MCP/Animation/CreateTests";
-        private readonly List<string> _createdPaths = new();
-
-        [TearDown]
-        public void TearDown()
-        {
-            foreach (var path in _createdPaths)
-            {
-                if (!string.IsNullOrEmpty(path) && AssetDatabase.LoadAssetAtPath<AnimationClip>(path) != null)
-                    AssetDatabase.DeleteAsset(path);
-            }
-            _createdPaths.Clear();
-
-            if (AssetDatabase.IsValidFolder(TestFolder))
-            {
-                AssetDatabase.DeleteAsset(TestFolder);
-                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
-        }
 
         [Test]
         public void CreateAnimationClips_NullPaths_ThrowsArgumentNullException()
@@ -59,7 +41,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimationClips_ValidPath_CreatesAssetAndReturnsInfo()
         {
             var assetPath = $"{TestFolder}/TestClip.anim";
-            _createdPaths.Add(assetPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
+            folderExecutor.Execute();
 
             var response = AnimationTools.CreateAnimationClips(new[] { assetPath });
 
@@ -84,7 +67,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 $"{TestFolder}/Clip2.anim",
                 $"{TestFolder}/Clip3.anim"
             };
-            foreach (var p in paths) _createdPaths.Add(p);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
+            folderExecutor.Execute();
 
             var response = AnimationTools.CreateAnimationClips(paths);
 
@@ -137,7 +121,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimationClips_NestedFolderPath_CreatesFoldersAndAsset()
         {
             var assetPath = $"{TestFolder}/SubFolder/Nested/DeepClip.anim";
-            _createdPaths.Add(assetPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests", "SubFolder", "Nested");
+            folderExecutor.Execute();
 
             var response = AnimationTools.CreateAnimationClips(new[] { assetPath });
 
@@ -154,7 +139,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimationClips_MixedValidAndInvalid_CreatesValidReturnsErrorsForInvalid()
         {
             var validPath = $"{TestFolder}/ValidClip.anim";
-            _createdPaths.Add(validPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
+            folderExecutor.Nest(new AnimationClipExecutor(validPath));
+            folderExecutor.Execute();
 
             var response = AnimationTools.CreateAnimationClips(new[]
             {
@@ -177,7 +164,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimationClips_PathAlreadyExists_CreatesNewAsset()
         {
             var assetPath = $"{TestFolder}/ExistingClip.anim";
-            _createdPaths.Add(assetPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animation", "CreateTests");
+            folderExecutor.Execute();
 
             // Create once
             var response1 = AnimationTools.CreateAnimationClips(new[] { assetPath });

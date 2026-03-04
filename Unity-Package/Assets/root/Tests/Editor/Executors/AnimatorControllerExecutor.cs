@@ -13,14 +13,15 @@
 using System.IO;
 using UnityEditor;
 using UnityEditor.Animations;
+using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
     /// <summary>
-    /// Test executor that creates an AnimatorController asset for testing and cleans it up afterward.
-    /// Usage: Create in SetUp, call Teardown in TearDown.
+    /// Test executor that manages an AnimatorController asset lifecycle via LazyNodeExecutor.
+    /// Creates the controller when SetAction is called, deletes it in PostExecute.
     /// </summary>
-    public class AnimatorControllerExecutor
+    public class AnimatorControllerExecutor : LazyNodeExecutor
     {
         public string AssetPath { get; }
         public AnimatorController? Controller => AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetPath);
@@ -28,29 +29,25 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public AnimatorControllerExecutor(string assetPath)
         {
             AssetPath = assetPath;
+            SetAction(() => CreateController());
         }
 
-        /// <summary>Creates the AnimatorController asset on disk and returns self for chaining.</summary>
-        public AnimatorControllerExecutor Setup()
+        private void CreateController()
         {
-            var directory = Path.GetDirectoryName(AssetPath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
-
             if (AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetPath) == null)
             {
                 AnimatorController.CreateAnimatorControllerAtPath(AssetPath);
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             }
-
-            return this;
         }
 
-        /// <summary>Deletes the AnimatorController asset from disk.</summary>
-        public void Teardown()
+        protected override void PostExecute(object? input = null)
+        {
+            DeleteController();
+            base.PostExecute(input);
+        }
+
+        private void DeleteController()
         {
             if (!string.IsNullOrEmpty(AssetPath) && AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetPath) != null)
             {

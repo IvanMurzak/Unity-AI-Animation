@@ -13,14 +13,15 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
     /// <summary>
-    /// Test executor that creates an AnimationClip asset for testing and cleans it up afterward.
-    /// Usage: Create in SetUp, call Teardown in TearDown.
+    /// Test executor that manages an AnimationClip asset lifecycle via LazyNodeExecutor.
+    /// Creates the clip when SetAction is called, deletes it in PostExecute.
     /// </summary>
-    public class AnimationClipExecutor
+    public class AnimationClipExecutor : LazyNodeExecutor
     {
         public string AssetPath { get; }
         public AnimationClip? Clip => AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetPath);
@@ -28,18 +29,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public AnimationClipExecutor(string assetPath)
         {
             AssetPath = assetPath;
+            SetAction(() => CreateClip());
         }
 
-        /// <summary>Creates the AnimationClip asset on disk and returns self for chaining.</summary>
-        public AnimationClipExecutor Setup()
+        private void CreateClip()
         {
-            var directory = Path.GetDirectoryName(AssetPath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
-
             if (AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetPath) == null)
             {
                 var clip = new AnimationClip { name = Path.GetFileNameWithoutExtension(AssetPath) };
@@ -47,12 +41,15 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
             }
-
-            return this;
         }
 
-        /// <summary>Deletes the AnimationClip asset from disk.</summary>
-        public void Teardown()
+        protected override void PostExecute(object? input = null)
+        {
+            DeleteClip();
+            base.PostExecute(input);
+        }
+
+        private void DeleteClip()
         {
             if (!string.IsNullOrEmpty(AssetPath) && AssetDatabase.LoadAssetAtPath<AnimationClip>(AssetPath) != null)
             {

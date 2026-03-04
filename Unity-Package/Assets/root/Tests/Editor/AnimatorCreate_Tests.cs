@@ -11,10 +11,10 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
+using com.IvanMurzak.Unity.MCP.Editor.Tests.Utils;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
@@ -22,24 +22,6 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
     public class AnimatorCreate_Tests
     {
         private const string TestFolder = "Assets/Tests/MCP/Animator/CreateTests";
-        private readonly List<string> _createdPaths = new();
-
-        [TearDown]
-        public void TearDown()
-        {
-            foreach (var path in _createdPaths)
-            {
-                if (!string.IsNullOrEmpty(path) && AssetDatabase.LoadAssetAtPath<AnimatorController>(path) != null)
-                    AssetDatabase.DeleteAsset(path);
-            }
-            _createdPaths.Clear();
-
-            if (AssetDatabase.IsValidFolder(TestFolder))
-            {
-                AssetDatabase.DeleteAsset(TestFolder);
-                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
-            }
-        }
 
         [Test]
         public void CreateAnimatorControllers_NullPaths_ThrowsArgumentNullException()
@@ -59,7 +41,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimatorControllers_ValidPath_CreatesAssetAndReturnsInfo()
         {
             var assetPath = $"{TestFolder}/TestController.controller";
-            _createdPaths.Add(assetPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
+            folderExecutor.Nest(new AnimatorControllerExecutor(assetPath));
+            folderExecutor.Execute();
 
             var response = AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
 
@@ -84,7 +68,13 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 $"{TestFolder}/Controller2.controller",
                 $"{TestFolder}/Controller3.controller"
             };
-            foreach (var p in paths) _createdPaths.Add(p);
+
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
+            foreach (var p in paths)
+            {
+                folderExecutor.Nest(new AnimatorControllerExecutor(p));
+            }
+            folderExecutor.Execute();
 
             var response = AnimatorTools.CreateAnimatorControllers(paths);
 
@@ -134,7 +124,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimatorControllers_NestedFolderPath_CreatesFoldersAndAsset()
         {
             var assetPath = $"{TestFolder}/SubFolder/Deep/Controller.controller";
-            _createdPaths.Add(assetPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests", "SubFolder", "Deep");
+            folderExecutor.Nest(new AnimatorControllerExecutor(assetPath));
+            folderExecutor.Execute();
 
             var response = AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
 
@@ -151,7 +143,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimatorControllers_MixedValidAndInvalid_CreatesValidReturnsErrorsForInvalid()
         {
             var validPath = $"{TestFolder}/ValidController.controller";
-            _createdPaths.Add(validPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
+            folderExecutor.Nest(new AnimatorControllerExecutor(validPath));
+            folderExecutor.Execute();
 
             var response = AnimatorTools.CreateAnimatorControllers(new[]
             {
@@ -174,7 +168,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void CreateAnimatorControllers_NewController_HasDefaultBaseLayer()
         {
             var assetPath = $"{TestFolder}/NewController.controller";
-            _createdPaths.Add(assetPath);
+            var folderExecutor = new CreateFolderExecutor("Assets", "Tests", "MCP", "Animator", "CreateTests");
+            folderExecutor.Nest(new AnimatorControllerExecutor(assetPath));
+            folderExecutor.Execute();
 
             AnimatorTools.CreateAnimatorControllers(new[] { assetPath });
 
