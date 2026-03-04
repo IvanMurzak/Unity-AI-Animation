@@ -223,6 +223,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             {
                 var clip = clipEx.Asset ?? throw new InvalidOperationException("Clip should have been created by executor");
                 clip.SetCurve(string.Empty, typeof(Transform), "m_LocalPosition.x", AnimationCurve.Linear(0f, 0f, 1f, 1f));
+                clip.SetCurve(string.Empty, typeof(Transform), "m_LocalPosition.y", AnimationCurve.Linear(0f, 0f, 1f, 2f));
                 EditorUtility.SetDirty(clip);
                 AssetDatabase.SaveAssets();
 
@@ -246,7 +247,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 var reloadedClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(clipEx.AssetPath);
                 var bindings = AnimationUtility.GetCurveBindings(reloadedClip);
                 Assert.IsFalse(bindings.Any(b => b.propertyName == "m_LocalPosition.x"),
-                    "Curve should have been removed");
+                    "Target curve should have been removed");
+                Assert.IsTrue(bindings.Any(b => b.propertyName == "m_LocalPosition.y"),
+                    "Unrelated curve should remain after removal");
             }).Execute();
         }
 
