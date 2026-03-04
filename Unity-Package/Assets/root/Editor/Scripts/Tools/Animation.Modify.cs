@@ -193,31 +193,45 @@ namespace com.IvanMurzak.Unity.MCP.Animation
 
             var relativePath = mod.relativePath ?? string.Empty;
 
-            // Get all curve bindings and recreate them, excluding the one to remove
+            // Get all curve bindings and curves before clearing
             var bindings = AnimationUtility.GetCurveBindings(clip);
+            var curveData = new Dictionary<EditorCurveBinding, AnimationCurve>();
+            foreach (var binding in bindings)
+            {
+                var curve = AnimationUtility.GetEditorCurve(clip, binding);
+                if (curve != null)
+                    curveData[binding] = curve;
+            }
+
+            var objectBindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+            var objectData = new Dictionary<EditorCurveBinding, ObjectReferenceKeyframe[]>();
+            foreach (var binding in objectBindings)
+            {
+                var keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
+                if (keyframes != null && keyframes.Length > 0)
+                    objectData[binding] = keyframes;
+            }
+
             clip.ClearCurves();
 
+            // Re-add all curves except the one to remove
             foreach (var binding in bindings)
             {
                 // Skip the binding we want to remove
                 if (binding.path == relativePath && binding.type == type && binding.propertyName == mod.propertyName)
                     continue;
 
-                var curve = AnimationUtility.GetEditorCurve(clip, binding);
-                if (curve != null)
+                if (curveData.TryGetValue(binding, out var curve))
                     AnimationUtility.SetEditorCurve(clip, binding, curve);
             }
 
-            // Also handle object reference curves
-            var objectBindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
             foreach (var binding in objectBindings)
             {
                 // Skip the binding we want to remove
                 if (binding.path == relativePath && binding.type == type && binding.propertyName == mod.propertyName)
                     continue;
 
-                var keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
-                if (keyframes != null && keyframes.Length > 0)
+                if (objectData.TryGetValue(binding, out var keyframes))
                     AnimationUtility.SetObjectReferenceCurve(clip, binding, keyframes);
             }
         }
