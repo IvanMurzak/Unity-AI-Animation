@@ -86,10 +86,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimationClip_NonExistentAsset_ThrowsException()
         {
-            var animRef = new AssetObjectRef($"{TestFolder}/NonExistent.anim");
-
-            Assert.Throws<Exception>(() =>
-                AnimationTools.ModifyAnimationClip(animRef, new[] { new AnimationModification { type = ModificationType.ClearCurves } }));
+            Assert.Throws<ArgumentException>(() =>
+                AnimationTools.ModifyAnimationClip(new AssetObjectRef($"{TestFolder}/NonExistent.anim"), new[] { new AnimationModification { type = ModificationType.ClearCurves } }));
         }
 
         // ── SetCurve ────────────────────────────────────────────────────────────
@@ -103,7 +101,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 new AnimationModification
                 {
                     type = ModificationType.SetCurve,
-                    relativePath = "",
+                    relativePath = string.Empty,
                     componentType = "UnityEngine.Transform",
                     propertyName = "m_LocalPosition.x",
                     keyframes = new[]
@@ -218,7 +216,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         {
             // First add a curve directly
             var clip = _clipExecutor.Clip!;
-            clip.SetCurve("", typeof(Transform), "m_LocalPosition.x", AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            clip.SetCurve(string.Empty, typeof(Transform), "m_LocalPosition.x", AnimationCurve.Linear(0f, 0f, 1f, 1f));
             EditorUtility.SetDirty(clip);
             AssetDatabase.SaveAssets();
 
@@ -228,7 +226,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 new AnimationModification
                 {
                     type = ModificationType.RemoveCurve,
-                    relativePath = "",
+                    relativePath = string.Empty,
                     componentType = "UnityEngine.Transform",
                     propertyName = "m_LocalPosition.x"
                 }
@@ -239,7 +237,9 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             Assert.IsNotNull(response);
             Assert.IsNull(response.errors, "Expected no errors");
 
-            var bindings = AnimationUtility.GetCurveBindings(_clipExecutor.Clip!);
+            // Reload the clip to get the updated version
+            var reloadedClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(TestClipPath);
+            var bindings = AnimationUtility.GetCurveBindings(reloadedClip);
             Assert.IsFalse(bindings.Any(b => b.propertyName == "m_LocalPosition.x"),
                 "Curve should have been removed");
         }
@@ -289,8 +289,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         {
             // Add multiple curves
             var clip = _clipExecutor.Clip!;
-            clip.SetCurve("", typeof(Transform), "m_LocalPosition.x", AnimationCurve.Linear(0f, 0f, 1f, 1f));
-            clip.SetCurve("", typeof(Transform), "m_LocalPosition.y", AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            clip.SetCurve(string.Empty, typeof(Transform), "m_LocalPosition.x", AnimationCurve.Linear(0f, 0f, 1f, 1f));
+            clip.SetCurve(string.Empty, typeof(Transform), "m_LocalPosition.y", AnimationCurve.Linear(0f, 0f, 1f, 1f));
             EditorUtility.SetDirty(clip);
             AssetDatabase.SaveAssets();
 
@@ -531,7 +531,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 new AnimationModification
                 {
                     type = ModificationType.SetCurve,
-                    relativePath = "",
+                    relativePath = string.Empty,
                     componentType = "UnityEngine.Transform",
                     propertyName = "m_LocalPosition.x",
                     keyframes = new[]

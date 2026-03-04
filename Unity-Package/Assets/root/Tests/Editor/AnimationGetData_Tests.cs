@@ -66,10 +66,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_NonExistentAsset_ThrowsException()
         {
-            var ref_ = new AssetObjectRef($"{TestFolder}/NonExistent.anim");
-
-            Assert.Throws<Exception>(() =>
-                AnimationTools.GetData(ref_));
+            Assert.Throws<ArgumentException>(() =>
+                AnimationTools.GetData(new AssetObjectRef($"{TestFolder}/NonExistent.anim")));
         }
 
         [Test]
@@ -122,7 +120,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         {
             var clip = _clipExecutor.Clip!;
             var curve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
-            clip.SetCurve("", typeof(Transform), "localPosition.x", curve);
+            clip.SetCurve(string.Empty, typeof(Transform), "localPosition.x", curve);
             EditorUtility.SetDirty(clip);
             AssetDatabase.SaveAssets();
 
@@ -132,7 +130,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             Assert.IsNotNull(response.curveBindings);
             Assert.GreaterOrEqual(response.curveBindings!.Count, 1);
             var binding = response.curveBindings[0];
-            Assert.AreEqual("localPosition.x", binding.propertyName);
+            Assert.AreEqual("m_LocalPosition.x", binding.propertyName);
             Assert.AreEqual(2, binding.keyframeCount);
         }
 

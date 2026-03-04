@@ -122,7 +122,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimatorControllers_EmptyStringPath_ReturnsError()
         {
-            var response = AnimatorTools.CreateAnimatorControllers(new[] { "" });
+            var response = AnimatorTools.CreateAnimatorControllers(new[] { string.Empty });
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.errors);
@@ -158,7 +158,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 validPath,
                 "NoPrefixController.controller",
                 $"{TestFolder}/WrongExt.anim",
-                ""
+                string.Empty
             });
 
             Assert.IsNotNull(response);

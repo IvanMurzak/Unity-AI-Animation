@@ -66,10 +66,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void GetData_NonExistentAsset_ThrowsException()
         {
-            var ref_ = new AssetObjectRef($"{TestFolder}/NonExistent.controller");
-
-            Assert.Throws<Exception>(() =>
-                AnimatorTools.GetData(ref_));
+            Assert.Throws<ArgumentException>(() =>
+                AnimatorTools.GetData(new AssetObjectRef($"{TestFolder}/NonExistent.controller")));
         }
 
         [Test]

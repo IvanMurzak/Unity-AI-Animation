@@ -80,3 +80,4 @@ crashlytics-build.properties
 /UserSettings/
 
 /.vscode/mcp.json
+.mcp.json

@@ -93,10 +93,8 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void ModifyAnimatorController_NonExistentAsset_ThrowsException()
         {
-            var animatorRef = new AssetObjectRef($"{TestFolder}/NonExistent.controller");
-
-            Assert.Throws<Exception>(() =>
-                AnimatorTools.ModifyAnimatorController(animatorRef, new[] { new AnimatorModification { type = AnimatorModificationType.AddLayer, layerName = "X" } }));
+            Assert.Throws<ArgumentException>(() =>
+                AnimatorTools.ModifyAnimatorController(new AssetObjectRef($"{TestFolder}/NonExistent.controller"), new[] { new AnimatorModification { type = AnimatorModificationType.AddLayer, layerName = "X" } }));
         }
 
         // ── AddParameter ────────────────────────────────────────────────────────
@@ -339,6 +337,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public void ModifyAnimatorController_RemoveLayer_Valid_LayerRemoved()
         {
             var controller = _controllerExecutor.Controller!;
+            int initialLayerCount = controller.layers.Length;
             controller.AddLayer("ExtraLayer");
             EditorUtility.SetDirty(controller);
             AssetDatabase.SaveAssets();
@@ -356,8 +355,13 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
             var response = AnimatorTools.ModifyAnimatorController(animatorRef, mods);
 
             Assert.IsNull(response.errors);
-            var remaining = _controllerExecutor.Controller!.layers.FirstOrDefault(l => l.name == "ExtraLayer");
-            Assert.IsNull(remaining.stateMachine, "Layer 'ExtraLayer' should have been removed");
+            // Check that the layer was removed by verifying the layer count decreased
+            var updatedController = _controllerExecutor.Controller;
+            Assert.IsNotNull(updatedController, "Controller reference was lost after modification");
+            Assert.AreEqual(initialLayerCount, updatedController.layers.Length,
+                "Layer count should return to initial count after removing the extra layer");
+            Assert.IsFalse(updatedController.layers.Any(l => l.name == "ExtraLayer"),
+                "Layer 'ExtraLayer' should have been removed");
         }
 
         [Test]

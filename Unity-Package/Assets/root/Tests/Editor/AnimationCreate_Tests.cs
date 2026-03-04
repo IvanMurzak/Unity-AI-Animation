@@ -125,7 +125,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         [Test]
         public void CreateAnimationClips_EmptyStringPath_ReturnsError()
         {
-            var response = AnimationTools.CreateAnimationClips(new[] { "" });
+            var response = AnimationTools.CreateAnimationClips(new[] { string.Empty });
 
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.errors);
@@ -161,7 +161,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 validPath,
                 "BadPath/NoPrefixClip.anim",
                 $"{TestFolder}/WrongExtension.txt",
-                ""
+                string.Empty
             });
 
             Assert.IsNotNull(response);

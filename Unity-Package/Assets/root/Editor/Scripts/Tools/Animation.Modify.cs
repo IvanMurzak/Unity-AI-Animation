@@ -177,7 +177,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                 curve.AddKey(keyframe);
             }
 
-            clip.SetCurve(mod.relativePath ?? "", type, mod.propertyName, curve);
+            clip.SetCurve(mod.relativePath ?? string.Empty, type, mod.propertyName, curve);
         }
 
         private static void ApplyRemoveCurve(AnimationClip clip, AnimationModification mod)
@@ -191,7 +191,35 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             if (type == null)
                 throw new Exception($"Could not resolve component type: {mod.componentType}");
 
-            clip.SetCurve(mod.relativePath ?? "", type, mod.propertyName, null);
+            var relativePath = mod.relativePath ?? string.Empty;
+
+            // Get all curve bindings and recreate them, excluding the one to remove
+            var bindings = AnimationUtility.GetCurveBindings(clip);
+            clip.ClearCurves();
+
+            foreach (var binding in bindings)
+            {
+                // Skip the binding we want to remove
+                if (binding.path == relativePath && binding.type == type && binding.propertyName == mod.propertyName)
+                    continue;
+
+                var curve = AnimationUtility.GetEditorCurve(clip, binding);
+                if (curve != null)
+                    AnimationUtility.SetEditorCurve(clip, binding, curve);
+            }
+
+            // Also handle object reference curves
+            var objectBindings = AnimationUtility.GetObjectReferenceCurveBindings(clip);
+            foreach (var binding in objectBindings)
+            {
+                // Skip the binding we want to remove
+                if (binding.path == relativePath && binding.type == type && binding.propertyName == mod.propertyName)
+                    continue;
+
+                var keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
+                if (keyframes != null && keyframes.Length > 0)
+                    AnimationUtility.SetObjectReferenceCurve(clip, binding, keyframes);
+            }
         }
 
         private static void ApplyAddEvent(List<AnimationEvent> eventsList, AnimationModification mod)
@@ -205,7 +233,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             {
                 time = mod.time.Value,
                 functionName = mod.functionName,
-                stringParameter = mod.stringParameter ?? "",
+                stringParameter = mod.stringParameter ?? string.Empty,
                 floatParameter = mod.floatParameter ?? 0f,
                 intParameter = mod.intParameter ?? 0
             };
