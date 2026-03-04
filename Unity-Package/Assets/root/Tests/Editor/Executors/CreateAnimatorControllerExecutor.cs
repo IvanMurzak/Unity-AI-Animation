@@ -23,7 +23,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
         public CreateAnimatorControllerExecutor(string controllerName, params string[] folders) : base(controllerName, folders)
         {
             if (!controllerName.EndsWith(".controller", StringComparison.OrdinalIgnoreCase))
-                throw new ArgumentException("Controller name should not contain a file extension.", nameof(controllerName));
+                throw new ArgumentException("Controller name must end with '.controller'.", nameof(controllerName));
 
             SetAction(() =>
             {
