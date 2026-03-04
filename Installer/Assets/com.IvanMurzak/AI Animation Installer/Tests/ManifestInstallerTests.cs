@@ -17,7 +17,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
     {
         const string PackageIdTag = "PACKAGE_ID";
         const string PackageVersionTag = "PACKAGE_VERSION";
-        const string FilesRoot = "Assets/AI Animation Installer/Tests/Files";
+        const string FilesRoot = "Assets/com.IvanMurzak/AI Animation Installer/Tests/Files";
         const string FilesCopyRoot = "Temp/AI Animation Installer/Tests/Files";
         static string CorrectManifestPath => $"{FilesRoot}/Correct/correct_manifest.json";
 
