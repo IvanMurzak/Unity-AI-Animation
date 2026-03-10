@@ -16,7 +16,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer
     public static partial class Installer
     {
         public const string PackageId = "com.ivanmurzak.unity.mcp.animation";
-        public const string Version = "1.1.0";
+        public const string Version = "1.1.1";
 
         static Installer()
         {
