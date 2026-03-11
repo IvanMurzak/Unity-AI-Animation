@@ -48,5 +48,6 @@
         "org.nuget"
       ]
     }
-  ]
+  ],
+  "testables": ["com.ivanmurzak.unity.mcp.animation"]
 }

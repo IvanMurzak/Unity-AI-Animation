@@ -1,17 +1,13 @@
 {
     "name": "RuntimeTests",
     "rootNamespace": "",
-    "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
+    "optionalUnityReferences": ["TestAssemblies"],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [
-        "nunit.framework.dll"
-    ],
+    "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
