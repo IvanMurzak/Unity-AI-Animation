@@ -42,5 +42,6 @@
         "org.nuget.r3"
       ]
     }
-  ]
+  ],
+  "testables": ["com.ivanmurzak.unity.mcp"]
 }

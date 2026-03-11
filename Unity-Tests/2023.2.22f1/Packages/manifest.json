@@ -48,5 +48,5 @@
       ]
     }
   ],
-  "testables": ["com.ivanmurzak.unity.mcp.animation"]
+  "testables": ["com.ivanmurzak.unity.mcp.animation", "com.ivanmurzak.unity.mcp"]
 }
