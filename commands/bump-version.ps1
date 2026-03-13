@@ -48,18 +48,6 @@ $VersionFiles = @(
         Pattern     = 'public const string Version = "[\d\.]+";'
         Replace     = 'public const string Version = "{VERSION}";'
         Description = "Installer C# version constant"
-    },
-    @{
-        Path        = "Unity-Package/Assets/root/README.md"
-        Pattern     = "https://github\.com/IvanMurzak/Unity-AI-Animation/releases/download/[\d\.]+/AI-Animation-Installer\.unitypackage"
-        Replace     = "https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/{VERSION}/AI-Animation-Installer.unitypackage"
-        Description = "Plugin README download URL"
-    },
-    @{
-        Path        = "README.md"
-        Pattern     = "https://github\.com/IvanMurzak/Unity-AI-Animation/releases/download/[\d\.]+/AI-Animation-Installer\.unitypackage"
-        Replace     = "https://github.com/IvanMurzak/Unity-AI-Animation/releases/download/{VERSION}/AI-Animation-Installer.unitypackage"
-        Description = "Plugin README download URL"
     }
 )
 
