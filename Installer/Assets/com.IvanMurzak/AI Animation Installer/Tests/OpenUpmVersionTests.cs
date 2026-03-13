@@ -14,32 +14,32 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
     public class OpenUpmVersionTests
     {
         const string SampleResponse = @"{
-            ""name"": ""com.ivanmurzak.unity.mcp.animation"",
+            ""name"": ""com.example.package"",
             ""versions"": {
-                ""0.1.0"": { ""version"": ""0.1.0"" },
-                ""0.5.0"": { ""version"": ""0.5.0"" },
-                ""0.10.0"": { ""version"": ""0.10.0"" },
-                ""0.50.0"": { ""version"": ""0.50.0"" },
-                ""0.51.0"": { ""version"": ""0.51.0"" },
-                ""0.52.0"": { ""version"": ""0.52.0"" }
+                ""1.0.0"": { ""version"": ""1.0.0"" },
+                ""1.0.5"": { ""version"": ""1.0.5"" },
+                ""1.0.10"": { ""version"": ""1.0.10"" },
+                ""1.0.20"": { ""version"": ""1.0.20"" },
+                ""1.1.0"": { ""version"": ""1.1.0"" },
+                ""1.1.3"": { ""version"": ""1.1.3"" }
             }
         }";
 
         [Test]
         public void ParseBestVersion_ExactVersionExists_ReturnsIt()
         {
-            var result = Installer.ParseBestVersion(SampleResponse, "0.52.0");
+            var result = Installer.ParseBestVersion(SampleResponse, "1.1.3");
 
-            Assert.AreEqual("0.52.0", result,
+            Assert.AreEqual("1.1.3", result,
                 "Should return the exact version when it exists on OpenUPM");
         }
 
         [Test]
         public void ParseBestVersion_ExactVersionMissing_ReturnsHighestBelow()
         {
-            var result = Installer.ParseBestVersion(SampleResponse, "0.53.0");
+            var result = Installer.ParseBestVersion(SampleResponse, "1.1.5");
 
-            Assert.AreEqual("0.52.0", result,
+            Assert.AreEqual("1.1.3", result,
                 "Should return the highest available version below the target");
         }
 
@@ -55,7 +55,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
         [Test]
         public void ParseBestVersion_MalformedJson_ReturnsNull()
         {
-            var result = Installer.ParseBestVersion("not valid json {{{", "0.52.0");
+            var result = Installer.ParseBestVersion("not valid json {{{", "1.1.3");
 
             Assert.IsNull(result,
                 "Should return null for malformed JSON");
@@ -65,7 +65,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
         public void ParseBestVersion_EmptyVersions_ReturnsNull()
         {
             var json = @"{ ""name"": ""pkg"", ""versions"": {} }";
-            var result = Installer.ParseBestVersion(json, "0.52.0");
+            var result = Installer.ParseBestVersion(json, "1.1.3");
 
             Assert.IsNull(result,
                 "Should return null when versions object is empty");
@@ -74,7 +74,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
         [Test]
         public void ParseBestVersion_NullInput_ReturnsNull()
         {
-            Assert.IsNull(Installer.ParseBestVersion(null, "0.52.0"),
+            Assert.IsNull(Installer.ParseBestVersion(null, "1.1.3"),
                 "Should return null for null JSON input");
 
             Assert.IsNull(Installer.ParseBestVersion(SampleResponse, null),
@@ -84,7 +84,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
         [Test]
         public void ParseBestVersion_EmptyStringInput_ReturnsNull()
         {
-            Assert.IsNull(Installer.ParseBestVersion("", "0.52.0"),
+            Assert.IsNull(Installer.ParseBestVersion("", "1.1.3"),
                 "Should return null for empty JSON input");
 
             Assert.IsNull(Installer.ParseBestVersion(SampleResponse, ""),
@@ -95,7 +95,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
         public void ParseBestVersion_NoVersionsKey_ReturnsNull()
         {
             var json = @"{ ""name"": ""pkg"" }";
-            var result = Installer.ParseBestVersion(json, "0.52.0");
+            var result = Installer.ParseBestVersion(json, "1.1.3");
 
             Assert.IsNull(result,
                 "Should return null when JSON has no versions key");
@@ -107,23 +107,23 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Installer.Tests
             var json = @"{
                 ""versions"": {
                     ""invalid"": {},
-                    ""0.10.0"": {},
+                    ""1.0.10"": {},
                     ""also-bad"": {},
-                    ""0.5.0"": {}
+                    ""1.0.5"": {}
                 }
             }";
-            var result = Installer.ParseBestVersion(json, "0.52.0");
+            var result = Installer.ParseBestVersion(json, "1.1.3");
 
-            Assert.AreEqual("0.10.0", result,
+            Assert.AreEqual("1.0.10", result,
                 "Should skip invalid version strings and return the highest valid one");
         }
 
         [Test]
         public void ParseBestVersion_SelectsCorrectVersionAmongMany()
         {
-            var result = Installer.ParseBestVersion(SampleResponse, "0.51.0");
+            var result = Installer.ParseBestVersion(SampleResponse, "1.1.0");
 
-            Assert.AreEqual("0.51.0", result,
+            Assert.AreEqual("1.1.0", result,
                 "Should select the exact version when it exists, even when higher versions are available");
         }
     }
