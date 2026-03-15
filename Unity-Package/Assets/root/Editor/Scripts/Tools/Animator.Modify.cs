@@ -32,7 +32,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         (
             AnimatorModifyToolId,
             Title = "Animator / Modify",
-            DestructiveHint = true
+            ReadOnlyHint = false,
+            DestructiveHint = true,
+            IdempotentHint = false,
+            OpenWorldHint = false
         )]
         [Description("Modify Unity's AnimatorController asset. " +
             "Apply an array of modifications including adding/removing parameters, layers, states, and transitions. " +

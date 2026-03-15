@@ -30,7 +30,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         (
             AnimationModifyToolId,
             Title = "Animation / Modify",
-            DestructiveHint = true
+            ReadOnlyHint = false,
+            DestructiveHint = true,
+            IdempotentHint = false,
+            OpenWorldHint = false
         )]
         [Description("Modify Unity's AnimationClip asset. " +
             "Apply an array of modifications including setting curves, clearing curves, setting properties, and managing animation events. " +

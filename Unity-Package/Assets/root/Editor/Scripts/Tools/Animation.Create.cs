@@ -28,7 +28,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         [McpPluginTool
         (
             AnimationCreateToolId,
-            Title = "Animation / Create"
+            Title = "Animation / Create",
+            ReadOnlyHint = false,
+            DestructiveHint = false,
+            IdempotentHint = false,
+            OpenWorldHint = false
         )]
         [Description(@"Create Unity's Animation asset files (AnimationClip). Creates folders recursively if they do not exist. Each path should start with 'Assets/' and end with '.anim'.")]
         public static CreateAnimationResponse CreateAnimationClips

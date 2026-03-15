@@ -28,7 +28,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         [McpPluginTool
         (
             AnimatorCreateToolId,
-            Title = "Animator / Create"
+            Title = "Animator / Create",
+            ReadOnlyHint = false,
+            DestructiveHint = false,
+            IdempotentHint = false,
+            OpenWorldHint = false
         )]
         [Description(@"Create Unity's AnimatorController asset files. Creates folders recursively if they do not exist. Each path should start with 'Assets/' and end with '.controller'.")]
         public static CreateAnimatorResponse CreateAnimatorControllers

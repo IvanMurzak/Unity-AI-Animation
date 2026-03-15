@@ -28,7 +28,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         (
             AnimatorGetDataToolId,
             Title = "Animator / Get Data",
-            ReadOnlyHint = true
+            ReadOnlyHint = true,
+            DestructiveHint = false,
+            IdempotentHint = true,
+            OpenWorldHint = false
         )]
         [Description(@"Get data about a Unity AnimatorController asset file. Returns information such as name, layers, parameters, and states.")]
         public static GetAnimatorDataResponse GetData
