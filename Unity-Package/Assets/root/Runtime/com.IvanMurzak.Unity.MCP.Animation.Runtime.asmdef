@@ -1,5 +1,6 @@
 {
     "name": "com.IvanMurzak.Unity.MCP.Animation.Runtime",
+    "rootNamespace": "",
     "references": [
         "com.IvanMurzak.Unity.MCP.Runtime"
     ],
@@ -9,7 +10,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_MCP_READY"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
