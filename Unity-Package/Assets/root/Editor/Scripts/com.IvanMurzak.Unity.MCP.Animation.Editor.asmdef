@@ -1,5 +1,6 @@
 {
     "name": "com.IvanMurzak.Unity.MCP.Animation.Editor",
+    "rootNamespace": "",
     "references": [
         "com.IvanMurzak.Unity.MCP.Editor",
         "com.IvanMurzak.Unity.MCP.Runtime",
@@ -13,7 +14,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_MCP_READY"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

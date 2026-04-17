@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.ivanmurzak.unity.mcp": "0.63.3",
+    "com.ivanmurzak.unity.mcp": "0.64.0",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.test-framework": "1.1.33",
@@ -35,13 +35,11 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.ivanmurzak",
-        "extensions.unity",
-        "org.nuget.com.ivanmurzak",
-        "org.nuget.microsoft",
-        "org.nuget.system",
-        "org.nuget.r3"
+        "extensions.unity"
       ]
     }
   ],
-  "testables": ["com.ivanmurzak.unity.mcp"]
+  "testables": [
+    "com.ivanmurzak.unity.mcp"
+  ]
 }

@@ -7,13 +7,14 @@
         "com.IvanMurzak.Unity.MCP.Runtime",
         "com.IvanMurzak.Unity.MCP.TestFiles",
         "com.IvanMurzak.Unity.MCP.Animation.Runtime",
-        "com.IvanMurzak.Unity.MCP.Animation.Editor"
+        "com.IvanMurzak.Unity.MCP.Animation.Editor",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "optionalUnityReferences": ["TestAssemblies"],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
@@ -24,11 +25,13 @@
         "ReflectorNet.dll",
         "McpPlugin.dll",
         "McpPlugin.Common.dll",
-        "R3.dll"
+        "R3.dll",
+        "nunit.framework.dll"
     ],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
+        "UNITY_INCLUDE_TESTS",
+        "UNITY_MCP_READY"
     ],
     "versionDefines": [],
     "noEngineReferences": false

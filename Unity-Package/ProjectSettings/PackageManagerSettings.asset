@@ -32,18 +32,14 @@ MonoBehaviour:
     m_Scopes:
     - com.ivanmurzak
     - extensions.unity
-    - org.nuget.com.ivanmurzak
-    - org.nuget.microsoft
-    - org.nuget.system
-    - org.nuget.r3
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4
-  m_UserSelectedRegistryName: 
+  m_UserSelectedRegistryName: package.openupm.com
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -888
-    m_OriginalInstanceId: -890
+    m_UserModificationsInstanceId: -834
+    m_OriginalInstanceId: -838
   m_LoadAssets: 0
