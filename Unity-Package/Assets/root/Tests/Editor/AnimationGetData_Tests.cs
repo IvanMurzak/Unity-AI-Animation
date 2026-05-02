@@ -14,7 +14,7 @@ using System;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
-using com.IvanMurzak.Unity.MCP.Runtime.Data;
+using AIGD;
 
 namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
 {
