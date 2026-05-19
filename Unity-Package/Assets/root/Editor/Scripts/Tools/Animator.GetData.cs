@@ -33,6 +33,21 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = true,
             OpenWorldHint = false
         )]
+        [McpPluginSkillDescription("Inspect a Unity `AnimatorController` asset — controller name, every parameter " +
+            "(name, type, defaults), every layer with its state machine, every state, and every transition. Pair " +
+            "with '" + AnimatorModifyToolId + "' to write changes back.")]
+        [McpPluginSkillBody("Inspect a Unity `AnimatorController` asset. Returns the controller's name plus the " +
+            "full set of parameters, layers, states, and transitions — enough to drive a follow-up " +
+            "'" + AnimatorModifyToolId + "' call with valid names.\n\n" +
+            "## Inputs\n\n" +
+            "- `animatorRef` — reference to the `AnimatorController` asset (path must start with `Assets/` and " +
+            "end with `.controller`).\n\n" +
+            "## Returned fields\n\n" +
+            "- `name` — controller asset name.\n" +
+            "- `parameters` — every parameter (name, type, default value).\n" +
+            "- `layers` — every layer with its state machine, default state, and weight.\n" +
+            "- `states` — every state across all layers (name, speed, motion).\n" +
+            "- `transitions` — every transition with its conditions, source, and destination.")]
         [Description(@"Get data about a Unity AnimatorController asset file. Returns information such as name, layers, parameters, and states.")]
         public static GetAnimatorDataResponse GetData
         (

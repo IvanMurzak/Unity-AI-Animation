@@ -37,6 +37,28 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = false,
             OpenWorldHint = false
         )]
+        [McpPluginSkillDescription("Apply a batch of modifications to a Unity `AnimatorController` — add/remove " +
+            "parameters, layers, states, and transitions; set default states; set state motion/speed. Use " +
+            "'" + AnimatorGetDataToolId + "' first to discover valid names.")]
+        [McpPluginSkillBody("Apply a batch of modifications to a Unity `AnimatorController` asset. Each " +
+            "modification is dispatched by its `AnimatorModificationType` discriminator. Use " +
+            "'" + AnimatorGetDataToolId + "' first to discover valid names so the diff is targeted.\n\n" +
+            "## Inputs\n\n" +
+            "- `animatorRef` — reference to the `AnimatorController` asset (path must start with `Assets/` and " +
+            "end with `.controller`).\n" +
+            "- `modifications` — array of `AnimatorModification` entries.\n\n" +
+            "## Supported modification types\n\n" +
+            "- `AddParameter` / `RemoveParameter` — manage controller parameters (float, int, bool, trigger).\n" +
+            "- `AddLayer` / `RemoveLayer` — manage animator layers.\n" +
+            "- `AddState` / `RemoveState` — manage states inside a specific layer.\n" +
+            "- `SetDefaultState` — pick the default state for a layer.\n" +
+            "- `AddTransition` / `RemoveTransition` — manage state-to-state transitions.\n" +
+            "- `AddAnyStateTransition` — add a transition from Any State.\n" +
+            "- `SetStateMotion` — assign an `AnimationClip` as a state's motion.\n" +
+            "- `SetStateSpeed` — set a state's speed multiplier.\n\n" +
+            "## Behavior\n\n" +
+            "Per-modification errors are accumulated in the response's `errors` array instead of aborting the " +
+            "whole batch. The controller asset is marked dirty and saved after the modifications complete.")]
         [Description("Modify Unity's AnimatorController asset. " +
             "Apply an array of modifications including adding/removing parameters, layers, states, and transitions. " +
             "Use '" + AnimatorGetDataToolId + "' tool to get valid names and parameters for modifications.")]

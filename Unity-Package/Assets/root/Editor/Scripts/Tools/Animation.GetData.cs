@@ -34,6 +34,24 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = true,
             OpenWorldHint = false
         )]
+        [McpPluginSkillDescription("Inspect a Unity `AnimationClip` asset — name, length, frame rate, wrap mode, " +
+            "looping/legacy/humanMotion flags, local bounds, and the full set of float curves, object-reference " +
+            "curves, and events. Pair with '" + AnimationModifyToolId + "' to write changes back.")]
+        [McpPluginSkillBody("Inspect a Unity `AnimationClip` asset. Returns the high-level clip metadata plus the " +
+            "complete set of float curve bindings, object-reference curve bindings, and animation events. Pair " +
+            "with '" + AnimationModifyToolId + "' to write changes back.\n\n" +
+            "## Inputs\n\n" +
+            "- `animRef` — reference to the `AnimationClip` asset (path must start with `Assets/` and end with " +
+            "`.anim`).\n\n" +
+            "## Returned fields\n\n" +
+            "- `name`, `length`, `frameRate`, `wrapMode`, `isLooping`, `hasGenericRootTransform`, " +
+            "`hasMotionCurves`, `hasMotionFloatCurves`, `hasRootCurves`, `humanMotion`, `legacy`, `localBounds`, " +
+            "`empty`.\n" +
+            "- `curveBindings` — float curve bindings (`path`, `propertyName`, `type`, `isPPtrCurve`, " +
+            "`isDiscreteCurve`, `keyframeCount`).\n" +
+            "- `objectReferenceBindings` — object-reference curve bindings (same shape as `curveBindings`).\n" +
+            "- `events` — animation events (`time`, `functionName`, `intParameter`, `floatParameter`, " +
+            "`stringParameter`).")]
         [Description(@"Get data about a Unity AnimationClip asset file. Returns information such as name, length, frame rate, wrap mode, animation curves, and events.")]
         public static GetDataResponse GetData
         (
