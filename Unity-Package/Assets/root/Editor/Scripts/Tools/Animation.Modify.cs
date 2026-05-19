@@ -35,6 +35,29 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = false,
             OpenWorldHint = false
         )]
+        [McpPluginSkillDescription("Apply a batch of modifications to a Unity `AnimationClip` — set/remove float " +
+            "curves, clear all curves, set frame rate / wrap mode / legacy flag, add or clear animation events. " +
+            "Use '" + AnimationGetDataToolId + "' first to discover valid curve bindings.")]
+        [McpPluginSkillBody("Apply a batch of modifications to a Unity `AnimationClip` asset. Each modification " +
+            "is dispatched by its `ModificationType` discriminator. Use '" + AnimationGetDataToolId + "' first " +
+            "to discover valid property names and existing curves so the diff is targeted.\n\n" +
+            "## Inputs\n\n" +
+            "- `animRef` — reference to the `AnimationClip` asset (path must start with `Assets/` and end with " +
+            "`.anim`).\n" +
+            "- `modifications` — array of `AnimationModification` entries.\n\n" +
+            "## Supported modification types\n\n" +
+            "- `SetCurve` — add or replace a float animation curve (`path`, `propertyName`, `type`, `keyframes`).\n" +
+            "- `RemoveCurve` — remove a specific binding.\n" +
+            "- `ClearCurves` — remove every curve from the clip.\n" +
+            "- `SetFrameRate` — set the clip's frame rate.\n" +
+            "- `SetWrapMode` — set the clip's `WrapMode`.\n" +
+            "- `SetLegacy` — toggle the legacy animation flag.\n" +
+            "- `AddEvent` — append an animation event (`time`, `functionName`, `intParameter`, `floatParameter`, " +
+            "`stringParameter`).\n" +
+            "- `ClearEvents` — remove every animation event.\n\n" +
+            "## Behavior\n\n" +
+            "Per-modification errors are accumulated in the response's `errors` array instead of aborting the " +
+            "whole batch. Events are applied as a single rewrite after all per-entry mutations finish.")]
         [Description("Modify Unity's AnimationClip asset. " +
             "Apply an array of modifications including setting curves, clearing curves, setting properties, and managing animation events. " +
             "Use '" + AnimationGetDataToolId + "' tool to get valid property names and existing curves for modifications.")]

@@ -34,6 +34,19 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = false,
             OpenWorldHint = false
         )]
+        [McpPluginSkillDescription("Create empty Unity `AnimatorController` assets at the given project paths. " +
+            "Each path must start with `Assets/` and end with `.controller`. Missing intermediate folders are " +
+            "created recursively. Pair with '" + AnimatorModifyToolId + "' to add layers/states/parameters.")]
+        [McpPluginSkillBody("Create empty Unity `AnimatorController` assets at the given project paths. Each path " +
+            "must start with `Assets/` and end with `.controller`. Missing intermediate folders are created " +
+            "recursively, then `AssetDatabase.Refresh()` runs and the Editor windows repaint. Pair with " +
+            "'" + AnimatorModifyToolId + "' to add layers, states, parameters, and transitions afterwards.\n\n" +
+            "## Inputs\n\n" +
+            "- `sourcePaths` — array of project-relative `.controller` paths to create.\n\n" +
+            "## Behavior\n\n" +
+            "Each path is validated independently: empty / non-`Assets/` / non-`.controller` paths are skipped " +
+            "and appended to `errors` instead of aborting the whole batch. Successfully created controllers are " +
+            "returned in `createdAssets` with their path, instance ID, and name.")]
         [Description(@"Create Unity's AnimatorController asset files. Creates folders recursively if they do not exist. Each path should start with 'Assets/' and end with '.controller'.")]
         public static CreateAnimatorResponse CreateAnimatorControllers
         (

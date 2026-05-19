@@ -34,6 +34,19 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = false,
             OpenWorldHint = false
         )]
+        [McpPluginSkillDescription("Create empty Unity `AnimationClip` assets at the given project paths. Each path " +
+            "must start with `Assets/` and end with `.anim`. Missing intermediate folders are created recursively. " +
+            "Pair with '" + AnimationModifyToolId + "' to populate curves and events.")]
+        [McpPluginSkillBody("Create empty Unity `AnimationClip` assets at the given project paths. Each path must " +
+            "start with `Assets/` and end with `.anim`. Missing intermediate folders are created recursively, " +
+            "then `AssetDatabase.Refresh()` runs and the Editor windows repaint. Pair with " +
+            "'" + AnimationModifyToolId + "' to populate curves and events afterwards.\n\n" +
+            "## Inputs\n\n" +
+            "- `sourcePaths` — array of project-relative `.anim` paths to create.\n\n" +
+            "## Behavior\n\n" +
+            "Each path is validated independently: empty / non-`Assets/` / non-`.anim` paths are skipped and " +
+            "appended to `errors` instead of aborting the whole batch. Successfully created clips are returned in " +
+            "`createdAssets` with their path, instance ID, and name.")]
         [Description(@"Create Unity's Animation asset files (AnimationClip). Creates folders recursively if they do not exist. Each path should start with 'Assets/' and end with '.anim'.")]
         public static CreateAnimationResponse CreateAnimationClips
         (
