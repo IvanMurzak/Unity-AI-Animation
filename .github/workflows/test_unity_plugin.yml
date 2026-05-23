@@ -32,9 +32,16 @@ jobs:
     name: ${{ inputs.unityVersion }} ${{ inputs.testMode }} on ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
 
-    # permissions: # minimize the default token
-    #   contents: write
-    #   pull-requests: write
+    # Permissions for EnricoMi/publish-unit-test-result-action:
+    #   contents:read       – the action's get_commit call (returned 401 without this)
+    #   checks:write        – create the check run that surfaces test results
+    #   pull-requests:write – post the PR comment when comment_mode != off
+    #   actions:read        – read the triggering workflow run metadata
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      actions: read
 
     steps:
       # --------------------------------------------------------------------- #
@@ -113,6 +120,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ steps.tests.outputs.artifactsPath }}/**/*.xml
           check_name: ${{ inputs.unityVersion }} ${{ inputs.testMode }} ${{ matrix.platform }} Results
           comment_mode: failures
