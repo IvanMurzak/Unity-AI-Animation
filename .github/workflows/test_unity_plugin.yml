@@ -32,17 +32,6 @@ jobs:
     name: ${{ inputs.unityVersion }} ${{ inputs.testMode }} on ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
 
-    # Permissions for EnricoMi/publish-unit-test-result-action:
-    #   contents:read       – the action's get_commit call (returned 401 without this)
-    #   checks:write        – create the check run that surfaces test results
-    #   pull-requests:write – post the PR comment when comment_mode != off
-    #   actions:read        – read the triggering workflow run metadata
-    permissions:
-      contents: read
-      checks: write
-      pull-requests: write
-      actions: read
-
     steps:
       # --------------------------------------------------------------------- #
       # 2-a. (PR only) abort if the contributor also changed workflow files
