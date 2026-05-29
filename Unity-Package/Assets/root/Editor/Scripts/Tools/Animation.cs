@@ -14,7 +14,7 @@ using com.IvanMurzak.McpPlugin;
 
 namespace com.IvanMurzak.Unity.MCP.Animation
 {
-    [McpPluginToolType]
+    [AiToolType]
     public static partial class AnimationTools
     {
         // empty

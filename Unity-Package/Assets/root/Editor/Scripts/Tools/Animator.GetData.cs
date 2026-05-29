@@ -24,7 +24,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
     public static partial class AnimatorTools
     {
         public const string AnimatorGetDataToolId = "animator-get-data";
-        [McpPluginTool
+        [AiTool
         (
             AnimatorGetDataToolId,
             Title = "Animator / Get Data",
@@ -33,10 +33,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = true,
             OpenWorldHint = false
         )]
-        [McpPluginSkillDescription("Inspect a Unity `AnimatorController` asset — controller name, every parameter " +
+        [AiSkillDescription("Inspect a Unity `AnimatorController` asset — controller name, every parameter " +
             "(name, type, defaults), every layer with its state machine, every state, and every transition. Pair " +
             "with '" + AnimatorModifyToolId + "' to write changes back.")]
-        [McpPluginSkillBody("Inspect a Unity `AnimatorController` asset. Returns the controller's name plus the " +
+        [AiSkillBody("Inspect a Unity `AnimatorController` asset. Returns the controller's name plus the " +
             "full set of parameters, layers, states, and transitions — enough to drive a follow-up " +
             "'" + AnimatorModifyToolId + "' call with valid names.\n\n" +
             "## Inputs\n\n" +

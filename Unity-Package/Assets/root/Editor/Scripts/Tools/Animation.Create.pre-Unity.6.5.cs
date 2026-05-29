@@ -9,7 +9,7 @@
 */
 
 #nullable enable
-#if UNITY_6000_5_OR_NEWER
+#if !UNITY_6000_5_OR_NEWER
 
 using System;
 using System.Collections.Generic;
@@ -108,7 +108,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                     response.createdAssets.Add(new CreatedAnimationInfo
                     {
                         path = assetPath,
-                        instanceId = animationClip.GetEntityId(),
+                        instanceId = animationClip.GetInstanceID(),
                         name = animationClip.name
                     });
                 }
@@ -125,7 +125,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         public class CreatedAnimationInfo
         {
             public string path = string.Empty;
-            public UnityEngine.EntityId instanceId;
+            public int instanceId;
             public string name = string.Empty;
         }
 

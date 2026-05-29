@@ -9,7 +9,7 @@
 */
 
 #nullable enable
-#if UNITY_6000_5_OR_NEWER
+#if !UNITY_6000_5_OR_NEWER
 
 using System;
 using System.Collections.Generic;
@@ -19,39 +19,39 @@ using com.IvanMurzak.McpPlugin;
 using com.IvanMurzak.ReflectorNet.Utils;
 using com.IvanMurzak.Unity.MCP.Editor.Utils;
 using UnityEditor;
-using UnityEngine;
+using UnityEditor.Animations;
 
 namespace com.IvanMurzak.Unity.MCP.Animation
 {
-    public static partial class AnimationTools
+    public static partial class AnimatorTools
     {
-        public const string AnimationCreateToolId = "animation-create";
+        public const string AnimatorCreateToolId = "animator-create";
         [AiTool
         (
-            AnimationCreateToolId,
-            Title = "Animation / Create",
+            AnimatorCreateToolId,
+            Title = "Animator / Create",
             ReadOnlyHint = false,
             DestructiveHint = false,
             IdempotentHint = false,
             OpenWorldHint = false
         )]
-        [AiSkillDescription("Create empty Unity `AnimationClip` assets at the given project paths. Each path " +
-            "must start with `Assets/` and end with `.anim`. Missing intermediate folders are created recursively. " +
-            "Pair with '" + AnimationModifyToolId + "' to populate curves and events.")]
-        [AiSkillBody("Create empty Unity `AnimationClip` assets at the given project paths. Each path must " +
-            "start with `Assets/` and end with `.anim`. Missing intermediate folders are created recursively, " +
-            "then `AssetDatabase.Refresh()` runs and the Editor windows repaint. Pair with " +
-            "'" + AnimationModifyToolId + "' to populate curves and events afterwards.\n\n" +
+        [AiSkillDescription("Create empty Unity `AnimatorController` assets at the given project paths. " +
+            "Each path must start with `Assets/` and end with `.controller`. Missing intermediate folders are " +
+            "created recursively. Pair with '" + AnimatorModifyToolId + "' to add layers/states/parameters.")]
+        [AiSkillBody("Create empty Unity `AnimatorController` assets at the given project paths. Each path " +
+            "must start with `Assets/` and end with `.controller`. Missing intermediate folders are created " +
+            "recursively, then `AssetDatabase.Refresh()` runs and the Editor windows repaint. Pair with " +
+            "'" + AnimatorModifyToolId + "' to add layers, states, parameters, and transitions afterwards.\n\n" +
             "## Inputs\n\n" +
-            "- `sourcePaths` — array of project-relative `.anim` paths to create.\n\n" +
+            "- `sourcePaths` — array of project-relative `.controller` paths to create.\n\n" +
             "## Behavior\n\n" +
-            "Each path is validated independently: empty / non-`Assets/` / non-`.anim` paths are skipped and " +
-            "appended to `errors` instead of aborting the whole batch. Successfully created clips are returned in " +
-            "`createdAssets` with their path, instance ID, and name.")]
-        [Description(@"Create Unity's Animation asset files (AnimationClip). Creates folders recursively if they do not exist. Each path should start with 'Assets/' and end with '.anim'.")]
-        public static CreateAnimationResponse CreateAnimationClips
+            "Each path is validated independently: empty / non-`Assets/` / non-`.controller` paths are skipped " +
+            "and appended to `errors` instead of aborting the whole batch. Successfully created controllers are " +
+            "returned in `createdAssets` with their path, instance ID, and name.")]
+        [Description(@"Create Unity's AnimatorController asset files. Creates folders recursively if they do not exist. Each path should start with 'Assets/' and end with '.controller'.")]
+        public static CreateAnimatorResponse CreateAnimatorControllers
         (
-            [Description("The paths of the animation assets to create. Each path should start with 'Assets/' and end with '.anim'.")]
+            [Description("The paths of the animator controller assets to create. Each path should start with 'Assets/' and end with '.controller'.")]
             string[] sourcePaths
         )
         {
@@ -63,7 +63,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
 
             return MainThread.Instance.Run(() =>
             {
-                var response = new CreateAnimationResponse();
+                var response = new CreateAnimatorResponse();
 
                 foreach (var assetPath in sourcePaths)
                 {
@@ -81,10 +81,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                         continue;
                     }
 
-                    if (!assetPath.EndsWith(".anim"))
+                    if (!assetPath.EndsWith(".controller"))
                     {
                         response.errors ??= new();
-                        response.errors.Add($"Asset path '{assetPath}' must end with '.anim'.");
+                        response.errors.Add($"Asset path '{assetPath}' must end with '.controller'.");
                         continue;
                     }
 
@@ -96,20 +96,16 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                         AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
                     }
 
-                    // Create a new AnimationClip
-                    var animationClip = new AnimationClip
-                    {
-                        name = Path.GetFileNameWithoutExtension(assetPath)
-                    };
-
-                    AssetDatabase.CreateAsset(animationClip, assetPath);
+                    // Create a new AnimatorController
+                    var controller = AnimatorController.CreateAnimatorControllerAtPath(assetPath);
+                    controller.name = Path.GetFileNameWithoutExtension(assetPath);
 
                     response.createdAssets ??= new();
-                    response.createdAssets.Add(new CreatedAnimationInfo
+                    response.createdAssets.Add(new CreatedAnimatorInfo
                     {
                         path = assetPath,
-                        instanceId = animationClip.GetEntityId(),
-                        name = animationClip.name
+                        instanceId = controller.GetInstanceID(),
+                        name = controller.name
                     });
                 }
 
@@ -122,16 +118,16 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             });
         }
 
-        public class CreatedAnimationInfo
+        public class CreatedAnimatorInfo
         {
             public string path = string.Empty;
-            public UnityEngine.EntityId instanceId;
+            public int instanceId;
             public string name = string.Empty;
         }
 
-        public class CreateAnimationResponse
+        public class CreateAnimatorResponse
         {
-            public List<CreatedAnimationInfo>? createdAssets;
+            public List<CreatedAnimatorInfo>? createdAssets;
             public List<string>? errors;
         }
     }
