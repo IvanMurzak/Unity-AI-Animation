@@ -9,6 +9,7 @@
 */
 
 #nullable enable
+#if UNITY_6000_5_OR_NEWER
 
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
     public static partial class AnimatorTools
     {
         public const string AnimatorCreateToolId = "animator-create";
-        [McpPluginTool
+        [AiTool
         (
             AnimatorCreateToolId,
             Title = "Animator / Create",
@@ -34,10 +35,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = false,
             OpenWorldHint = false
         )]
-        [McpPluginSkillDescription("Create empty Unity `AnimatorController` assets at the given project paths. " +
+        [AiSkillDescription("Create empty Unity `AnimatorController` assets at the given project paths. " +
             "Each path must start with `Assets/` and end with `.controller`. Missing intermediate folders are " +
             "created recursively. Pair with '" + AnimatorModifyToolId + "' to add layers/states/parameters.")]
-        [McpPluginSkillBody("Create empty Unity `AnimatorController` assets at the given project paths. Each path " +
+        [AiSkillBody("Create empty Unity `AnimatorController` assets at the given project paths. Each path " +
             "must start with `Assets/` and end with `.controller`. Missing intermediate folders are created " +
             "recursively, then `AssetDatabase.Refresh()` runs and the Editor windows repaint. Pair with " +
             "'" + AnimatorModifyToolId + "' to add layers, states, parameters, and transitions afterwards.\n\n" +
@@ -103,7 +104,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                     response.createdAssets.Add(new CreatedAnimatorInfo
                     {
                         path = assetPath,
-                        instanceId = controller.GetInstanceID(),
+                        instanceId = controller.GetEntityId(),
                         name = controller.name
                     });
                 }
@@ -120,7 +121,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         public class CreatedAnimatorInfo
         {
             public string path = string.Empty;
-            public int instanceId;
+            public UnityEngine.EntityId instanceId;
             public string name = string.Empty;
         }
 
@@ -131,3 +132,4 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         }
     }
 }
+#endif

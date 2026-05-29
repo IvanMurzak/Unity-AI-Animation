@@ -9,7 +9,7 @@
 */
 
 #nullable enable
-#if UNITY_6000_5_OR_NEWER
+#if !UNITY_6000_5_OR_NEWER
 
 using System;
 using System.Collections.Generic;
@@ -122,7 +122,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
                 response.modifiedAsset = new ModifyAnimationInfo
                 {
                     path = assetPath,
-                    instanceId = animation.GetEntityId(),
+                    instanceId = animation.GetInstanceID(),
                     name = animation.name
                 };
 
@@ -286,7 +286,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
         public class ModifyAnimationInfo
         {
             public string path = string.Empty;
-            public UnityEngine.EntityId instanceId;
+            public int instanceId;
             public string name = string.Empty;
         }
 

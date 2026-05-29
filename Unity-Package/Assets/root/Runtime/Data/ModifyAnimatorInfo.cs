@@ -8,12 +8,15 @@
 └─────────────────────────────────────────────────────────────────────────┘
 */
 
+#if UNITY_6000_5_OR_NEWER
+
 namespace com.IvanMurzak.Unity.MCP.Animation
 {
     public class ModifyAnimatorInfo
     {
         public string path = string.Empty;
-        public int instanceId;
+        public UnityEngine.EntityId instanceId;
         public string name = string.Empty;
     }
 }
+#endif

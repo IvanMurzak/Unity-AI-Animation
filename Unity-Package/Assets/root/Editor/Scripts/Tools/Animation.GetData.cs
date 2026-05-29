@@ -25,7 +25,7 @@ namespace com.IvanMurzak.Unity.MCP.Animation
     public static partial class AnimationTools
     {
         public const string AnimationGetDataToolId = "animation-get-data";
-        [McpPluginTool
+        [AiTool
         (
             AnimationGetDataToolId,
             Title = "Animation / Get Data",
@@ -34,10 +34,10 @@ namespace com.IvanMurzak.Unity.MCP.Animation
             IdempotentHint = true,
             OpenWorldHint = false
         )]
-        [McpPluginSkillDescription("Inspect a Unity `AnimationClip` asset — name, length, frame rate, wrap mode, " +
+        [AiSkillDescription("Inspect a Unity `AnimationClip` asset — name, length, frame rate, wrap mode, " +
             "looping/legacy/humanMotion flags, local bounds, and the full set of float curves, object-reference " +
             "curves, and events. Pair with '" + AnimationModifyToolId + "' to write changes back.")]
-        [McpPluginSkillBody("Inspect a Unity `AnimationClip` asset. Returns the high-level clip metadata plus the " +
+        [AiSkillBody("Inspect a Unity `AnimationClip` asset. Returns the high-level clip metadata plus the " +
             "complete set of float curve bindings, object-reference curve bindings, and animation events. Pair " +
             "with '" + AnimationModifyToolId + "' to write changes back.\n\n" +
             "## Inputs\n\n" +

@@ -8,15 +8,15 @@
 └─────────────────────────────────────────────────────────────────────────┘
 */
 
-#nullable enable
-
-using com.IvanMurzak.McpPlugin;
+#if !UNITY_6000_5_OR_NEWER
 
 namespace com.IvanMurzak.Unity.MCP.Animation
 {
-    [AiToolType]
-    public static partial class AnimatorTools
+    public class ModifyAnimatorInfo
     {
-        // empty
+        public string path = string.Empty;
+        public int instanceId;
+        public string name = string.Empty;
     }
 }
+#endif
