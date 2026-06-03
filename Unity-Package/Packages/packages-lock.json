@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "com.ivanmurzak.unity.mcp": {
-      "version": "0.75.1",
+      "version": "0.77.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.modules.uielements": "1.0.0",
         "com.unity.test-framework": "1.1.33",
-        "extensions.unity.playerprefsex": "2.1.3"
+        "com.unity.modules.uielements": "1.0.0",
+        "extensions.unity.playerprefsex": "2.1.5"
       },
       "url": "https://package.openupm.com"
     },
@@ -86,7 +86,7 @@
       "url": "https://packages.unity.com"
     },
     "extensions.unity.playerprefsex": {
-      "version": "2.1.3",
+      "version": "2.1.5",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
