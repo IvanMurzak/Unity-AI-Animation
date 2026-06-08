@@ -12,7 +12,7 @@
       "url": "https://package.openupm.com"
     },
     "com.ivanmurzak.unity.mcp.animation": {
-      "version": "file:./../../../Unity-Package/Assets/root",
+      "version": "file:./../../../Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation",
       "depth": 0,
       "source": "local",
       "dependencies": {

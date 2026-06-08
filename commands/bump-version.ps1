@@ -38,7 +38,7 @@ $ErrorActionPreference = "Stop"
 # Version file locations (relative to script root)
 $VersionFiles = @(
     @{
-        Path        = "Unity-Package/Assets/root/package.json"
+        Path        = "Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/package.json"
         Pattern     = '"version":\s*"[\d\.]+"'
         Replace     = '"version": "{VERSION}"'
         Description = "Unity package version"
@@ -70,7 +70,7 @@ function Test-SemanticVersion {
 
 function Get-CurrentVersion {
     # Extract current version from package.json
-    $packageJsonPath = "Unity-Package/Assets/root/package.json"
+    $packageJsonPath = "Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/package.json"
     if (-not (Test-Path $packageJsonPath)) {
         throw "Could not find package.json at: $packageJsonPath"
     }
