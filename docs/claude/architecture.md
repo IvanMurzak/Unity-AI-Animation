@@ -3,7 +3,7 @@
 ## Project Layout
 
 ```
-Unity-Package/Assets/root/     # The distributable Unity package source
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/     # The distributable Unity package source
   Editor/Scripts/Tools/        # MCP tool implementations (Editor-only, UnityEditor API)
   Runtime/Data/                # Serializable data contracts (modification types, response types)
   Tests/Editor/                # Unity EditMode tests

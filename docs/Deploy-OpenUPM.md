@@ -8,9 +8,9 @@ OpenUPM is a registry of package made for Unity. It takes package sources from G
 
 ### Do each update
 
-⚠️ Make sure you done editing `package.json` and files in `Assets/root` folder. Because it is going to be public with no ability to discard it.
+⚠️ Make sure you done editing `package.json` and files in `Packages/com.ivanmurzak.unity.mcp.animation` folder. Because it is going to be public with no ability to discard it.
 
-1. Increment package version in the file `Assets/root/package.json`. It has `version` property.
+1. Increment package version in the file `Packages/com.ivanmurzak.unity.mcp.animation/package.json`. It has `version` property.
    > Any further updates should be done with incrementing package version and making another GitHub release.
    > Versions lower than `1.0.0` is represented in Unity as "preview".
 2. Create GitHub Release

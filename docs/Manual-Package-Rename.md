@@ -1,6 +1,6 @@
 # Manual `Package` rename
 
-#### 1️⃣ Customize `Assets/root/package.json`
+#### 1️⃣ Customize `Packages/com.ivanmurzak.unity.mcp.animation/package.json`
 
 - 👉 **Update** `name`
   > Sample: `com.github.your_name.package`
@@ -14,7 +14,7 @@
 <details>
   <summary><b>❌ NO - click</b></summary>
 
-  - 👉 **Delete** `Assets/root/Tests` folder
+  - 👉 **Delete** `Packages/com.ivanmurzak.unity.mcp.animation/Tests` folder
   - 👉 **Delete** `.github/workflows` folder
 
 </details>
@@ -25,8 +25,8 @@
   - 👉 **Repeat** these actions for these files.
 
   - Update the files:
-    - `Assets/root/Tests/Base/Package.Editor.Tests.asmdef`
-    - `Assets/root/Tests/Base/Package.Tests.asmdef`
+    - `Packages/com.ivanmurzak.unity.mcp.animation/Tests/Base/Package.Editor.Tests.asmdef`
+    - `Packages/com.ivanmurzak.unity.mcp.animation/Tests/Base/Package.Tests.asmdef`
 
   - Apply these actions to files above:
     - 👉 **Rename** the `Package` part of the file name

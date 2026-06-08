@@ -6,7 +6,7 @@ GitHub public repository could be used as a host for your package and directly i
 
 ## Deploy
 
-1. Increment package version in the file `Assets/root/package.json`. It has `version` property.
+1. Increment package version in the file `Packages/com.ivanmurzak.unity.mcp.animation/package.json`. It has `version` property.
    > Any further updates should be done by incrementing package version and making another GitHub release.
 2. Create GitHub Release
    1. Go to your GitHub repository

@@ -45,7 +45,7 @@ cd Commands
 Follow the instruction - [manual package rename](https://github.com/IvanMurzak/Unity-Package-Template/blob/main/Docs/Manual-Package-Rename.md)
 
 
-#### 3️⃣ Customize `Assets/root/package.json`
+#### 3️⃣ Customize `Packages/com.ivanmurzak.unity.mcp.animation/package.json`
 
 - 👉 **Update** `name`
   > Sample: `com.github.your_name.package`
@@ -65,7 +65,7 @@ Follow the instruction - [manual package rename](https://github.com/IvanMurzak/U
 <details>
   <summary><b>❌ NO</b></summary>
 
-- 👉 **Delete** `Assets/root/Tests` folder
+- 👉 **Delete** `Packages/com.ivanmurzak.unity.mcp.animation/Tests` folder
 - 👉 **Delete** `.github/workflows` folder
 
 </details>
@@ -86,7 +86,7 @@ Follow the instruction - [manual package rename](https://github.com/IvanMurzak/U
 
 </details>
 
-#### 4️⃣ Add files into `Assets/root` folder
+#### 4️⃣ Add files into `Packages/com.ivanmurzak.unity.mcp.animation` folder
 
 [Unity guidelines](https://docs.unity3d.com/Manual/cus-layout.html) about organizing files into the package root directory
 
@@ -121,7 +121,7 @@ Follow the instruction - [manual package rename](https://github.com/IvanMurzak/U
 ##### Final polishing
 
 - Update the `README.md` file (this file) with information about your package.
-- Copy the updated `README.md` to `Assets/root` as well.
+- Copy the updated `README.md` to `Packages/com.ivanmurzak.unity.mcp.animation` as well.
 
 > ⚠️ Everything outside of the `root` folder won't be added to your package. But still could be used for testing or showcasing your package at your repository.
 

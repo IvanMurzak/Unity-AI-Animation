@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.ivanmurzak.unity.mcp.animation": "file:./../../../Unity-Package/Assets/root",
+    "com.ivanmurzak.unity.mcp.animation": "file:./../../../Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation",
     "com.unity.feature.development": "1.0.1",
     "com.unity.test-framework": "1.1.33",
     "com.unity.ugui": "1.0.0",

@@ -27,7 +27,7 @@ jobs:
         id: get_version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
         with:
-          path: Unity-Package/Assets/root
+          path: Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation
 
       - name: Find previous version tag
         id: prev_tag
@@ -193,7 +193,7 @@ jobs:
       UPM_SERVICE_ACCOUNT_KEY_ID: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_ID }}
       UPM_SERVICE_ACCOUNT_KEY_SECRET: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_SECRET }}
       UPM_ORG_ID: ${{ secrets.UPM_ORG_ID }}
-      PACKAGE_DIR: Unity-Package/Assets/root
+      PACKAGE_DIR: Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation
       DIST_DIR: /tmp/signed-upm-dist
     steps:
       - name: Verify signing secrets are configured

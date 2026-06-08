@@ -23,7 +23,7 @@ References:
 The signing step is implemented as the `build-signed-upm-package` job in
 [`.github/workflows/release.yml`](../.github/workflows/release.yml). It runs in
 parallel with tests and builds on every version-bump release commit, packs the
-package at `Unity-Package/Assets/root/` with Unity's UPM CLI, verifies the
+package at `Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/` with Unity's UPM CLI, verifies the
 resulting archive contains `package/.attestation.p7m` and that its basename begins
 with `com.ivanmurzak.unity.mcp.animation-`, and uploads the signed `.tgz` as a
 `signed-upm-package` workflow artifact.
