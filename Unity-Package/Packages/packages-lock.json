@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.ivanmurzak.unity.mcp": {
-      "version": "0.82.3",
+      "version": "0.82.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
