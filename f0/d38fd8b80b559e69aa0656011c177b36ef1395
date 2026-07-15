@@ -1,0 +1,23 @@
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Installer.cs"
+  s_771981e95a4cd4::t_067606e8330b78 22
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/package.json
+  s_771981e95a4cd4::t_510bef1e5e2e58 15,19
+Unity-Package/Packages/packages-lock.json
+  s_771981e95a4cd4::t_00e1ea4b236086 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "f0d38fd8b80b559e69aa0656011c177b36ef1395",
+  "prompts": {},
+  "sessions": {
+    "s_771981e95a4cd4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9b0442f0-84f1-4ac1-9c96-3b6dfcd483ff",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}
