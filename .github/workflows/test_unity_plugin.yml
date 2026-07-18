@@ -98,27 +98,6 @@ jobs:
           key: ${{ inputs.unityVersion }} ${{ inputs.testMode }} on ${{ matrix.platform }}
 
       # --------------------------------------------------------------------- #
-      # Strip stale com.ivanmurzak.unity.mcp* entries from Library/PackageCache.
-      # The cache restore above can resurrect a PackageCache directory from a
-      # run where com.ivanmurzak.unity.mcp was pinned to an older version. When
-      # Unity then resolves the currently pinned version (per package.json) on
-      # top, BOTH directories appear under Library/PackageCache and the Package
-      # Manager registers BOTH as installed. The fresh version's source uses
-      # [AiPrompt*] types that only exist in the fresh DLLs, but the loader's
-      # class-table is contaminated by the stale assemblies, producing CS0246
-      # at compile time. Forcing a clean re-resolve every run resolves this.
-      - name: Strip stale com.ivanmurzak.unity.mcp PackageCache entries
-        shell: bash
-        run: |
-          cache_dir="${{ inputs.projectPath }}/Library/PackageCache"
-          if [ -d "$cache_dir" ]; then
-            echo "Cache dir exists. Checking for stale com.ivanmurzak.unity.mcp* entries:"
-            find "$cache_dir" -maxdepth 1 -type d -name 'com.ivanmurzak.unity.mcp*' -print -exec rm -rf {} +
-          else
-            echo "Cache dir $cache_dir not present — nothing to clean."
-          fi
-
-      # --------------------------------------------------------------------- #
       - name: Generate custom image name
         id: custom_image
         run: echo "image=unityci/editor:ubuntu-${{ inputs.unityVersion }}-${{ matrix.platform }}-3" >> $GITHUB_OUTPUT
