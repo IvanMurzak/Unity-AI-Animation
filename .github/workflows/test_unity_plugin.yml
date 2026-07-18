@@ -19,6 +19,29 @@ on:
 # 2. Job – runs only after a maintainer applies the `ci-ok` label
 ##############################################################################
 jobs:
+  # --------------------------------------------------------------------------- #
+  # Version-consistency gate - secretless. Runs the a2 checker synced into this
+  # repo (commands/check-versions.py) so version skew (the extension core pin vs
+  # every packages-lock.json vs the vendored NuGet DLLs) becomes a RED build on
+  # every PR. Design: unity-extensions-maintain f1 / 04-version-sync section 4.3.
+  #
+  # T1 supply-chain invariant (design 09-security): this job runs ONLY under plain
+  # unprivileged `pull_request` (the caller trigger). It takes no credentials, reads
+  # none, and needs none - the checker is offline and Python-stdlib only. Never move
+  # it under `pull_request_target`.
+  # --------------------------------------------------------------------------- #
+  consistency:
+    name: version-consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check version consistency
+        run: python commands/check-versions.py .
   test:
     if: |
       github.event_name != 'pull_request_target' ||

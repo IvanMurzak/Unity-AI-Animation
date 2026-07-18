@@ -5,7 +5,7 @@
 
 .DESCRIPTION
     Fetches the latest version from GitHub releases and updates the dependency
-    version in package.json and manifest.json files.
+    version in package.json and packages-lock.json files.
 
 .PARAMETER WhatIf
     Preview changes without applying them
@@ -32,9 +32,13 @@ $PackageName = "com.ivanmurzak.unity.mcp"
 $GitHubRepo = "IvanMurzak/Unity-MCP"
 
 # Files to update
+# unity-extensions-maintain FUP-1: keep packages-lock.json in lockstep with the UPM pin
 $TargetFiles = @(
     "Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/package.json",
-    "Unity-Package/Packages/manifest.json"
+    "Unity-Package/Packages/packages-lock.json",
+    "Unity-Tests/2022.3.62f3/Packages/packages-lock.json",
+    "Unity-Tests/2023.2.22f1/Packages/packages-lock.json",
+    "Unity-Tests/6000.3.1f1/Packages/packages-lock.json"
 )
 
 function Write-ColorText {
@@ -112,11 +116,20 @@ function Update-PackageVersion {
     $content = Get-Content $FilePath -Raw
     $originalContent = $content
 
-    # Pattern to match the package dependency line
+    # (1) The dependency-pin form "com.ivanmurzak.unity.mcp": "X" -- the package.json
+    #     dependency pin AND every packages-lock.json transitive requirement.
     $pattern = '("' + [regex]::Escape($PackageName) + '":\s*")[^"]+"'
     $replacement = '${1}' + $NewVersion + '"'
-
     $newContent = $content -replace $pattern, $replacement
+
+    # (2) unity-extensions-maintain FUP-1: also rewrite the top-level packages-lock.json
+    #     core ENTRY's own "version" field. It is keyed "version" inside the entry block,
+    #     so pattern (1) never matches it (that would leave checker C2 red). Scoped to the
+    #     core entry alone -- never any other package's version -- mirroring cli.py
+    #     _rewrite_lock_core_pin, which rewrites BOTH the entry version and the transitive
+    #     requirement so the lock stays fully consistent.
+    $lockCorePattern = '("' + [regex]::Escape($PackageName) + '"\s*:\s*\{\s*"version"\s*:\s*")[^"]+(")'
+    $newContent = $newContent -replace $lockCorePattern, ('${1}' + $NewVersion + '${2}')
 
     if ($originalContent -eq $newContent) {
         Write-ColorText "   No changes needed in: $FilePath" "Gray"
