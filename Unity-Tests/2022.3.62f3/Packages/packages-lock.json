@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.ivanmurzak.unity.mcp": {
-      "version": "0.86.2",
+      "version": "0.86.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -16,7 +16,7 @@
       "depth": 0,
       "source": "local",
       "dependencies": {
-        "com.ivanmurzak.unity.mcp": "0.86.2",
+        "com.ivanmurzak.unity.mcp": "0.86.3",
         "com.unity.modules.animation": "1.0.0"
       }
     },
