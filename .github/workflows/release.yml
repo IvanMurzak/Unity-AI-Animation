@@ -6,12 +6,24 @@ on:
     branches:
       - main
 
+# Serialises release runs per ref so two releases can never publish concurrently.
+# `cancel-in-progress` is deliberately UNSET: an in-flight release must finish
+# (it may already have created the tag/Release). `queue: max` raises the pending
+# queue from the default 1 to 100 — without it, a queued release is silently
+# cancelled and replaced by the next push, which is how a version bump can be
+# published while an earlier one never runs.
+# NOTE: `queue: max` and `cancel-in-progress: true` together are a validation error.
+concurrency:
+  group: release-${{ github.ref }}
+  queue: max
+
 env:
   INSTALLER_UNITY_VERSION: 2022.3.62f3
 
 jobs:
   check-version-tag:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       version: ${{ steps.get_version.outputs.current-version }}
       prev_tag: ${{ steps.prev_tag.outputs.tag }}
@@ -43,6 +55,7 @@ jobs:
   # The artifact is consumed by release-unity-plugin's atomic publish step.
   prepare-release-notes:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: [check-version-tag]
     if: needs.check-version-tag.outputs.tag_exists == 'false'
     steps:
@@ -100,6 +113,9 @@ jobs:
 
   build-unity-installer:
     runs-on: ubuntu-latest
+    # Unity-editor job (EditMode test + package export in the Unity image).
+    # Observed 4m29s-7m24s; generous headroom for image pull / licence activation.
+    timeout-minutes: 30
     needs: [check-version-tag]
     if: needs.check-version-tag.outputs.tag_exists == 'false'
     steps:
@@ -187,6 +203,7 @@ jobs:
   # See https://openupm.com/docs/signing-upm-packages.html for the procedure.
   build-signed-upm-package:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: [check-version-tag]
     if: needs.check-version-tag.outputs.tag_exists == 'false'
     env:
@@ -363,6 +380,7 @@ jobs:
   # release with incomplete assets. Signing failure → no release (hard gate).
   release-unity-plugin:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs:
       [
         check-version-tag,
@@ -430,6 +448,7 @@ jobs:
   # post-release publish job collapsed into release-unity-plugin.
   cleanup-artifacts:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: [release-unity-plugin]
     if: always()
     steps:
