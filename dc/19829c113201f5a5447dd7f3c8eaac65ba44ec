@@ -1,0 +1,33 @@
+Unity-Package/Assets/root/package.json
+  s_254b2884855a96::t_50c2ea4e7db56f 19
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animation.Modify.cs
+  s_254b2884855a96::t_0f75a0df8b26d6 38-60
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animation.Create.cs
+  s_254b2884855a96::t_1e1ebf43279f4e 37-49
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animator.Modify.cs
+  s_254b2884855a96::t_132787e3bf0242 40-61
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animator.Create.cs
+  s_254b2884855a96::t_277715330b4f36 37-49
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animator.GetData.cs
+  s_254b2884855a96::t_0fa3c408f24b9f 36-50
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animation.GetData.cs
+  s_254b2884855a96::t_ae8bf213d75235 37-54
+Unity-Package/Packages/manifest.json
+  s_254b2884855a96::t_753e02d62062df 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.10",
+  "base_commit_sha": "dc19829c113201f5a5447dd7f3c8eaac65ba44ec",
+  "prompts": {},
+  "sessions": {
+    "s_254b2884855a96": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d643efd7-8f16-4f40-9b01-f9eefe3fa842",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}

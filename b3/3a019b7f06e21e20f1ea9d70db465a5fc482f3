@@ -1,0 +1,27 @@
+Unity-Package/Assets/root/Tests/Editor/AnimationCreate_Tests.cs
+  13927e5320e81c89 169,179,181,184-191
+Unity-Package/Assets/root/Tests/Editor/AnimationModify_Tests.cs
+  13927e5320e81c89 299-332
+Unity-Package/Assets/root/Tests/Editor/AnimatorModify_Tests.cs
+  13927e5320e81c89 741-742,752,757-759,764,806-877,917-938,1138-1185
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "b33a019b7f06e21e20f1ea9d70db465a5fc482f3",
+  "prompts": {
+    "13927e5320e81c89": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d4300d81-7554-484c-aef5-17f785ea9eb8",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>",
+      "messages": [],
+      "total_additions": 2157,
+      "total_deletions": 1947,
+      "accepted_lines": 516,
+      "overriden_lines": 0
+    }
+  }
+}
