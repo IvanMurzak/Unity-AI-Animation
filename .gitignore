@@ -1,2 +1,7 @@
 # Claude
 .claude
+
+# Machine-generated pipeline runtime state — not source.
+# `.pipeline/.hooks/` stays tracked; only its runtime siblings are ignored.
+.pipeline/.runtime/
+.pipeline/.stats/
