@@ -51,7 +51,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 Assert.AreEqual(1, response.createdAssets!.Count);
                 Assert.AreEqual(assetPath, response.createdAssets[0].path);
                 Assert.AreEqual("TestController", response.createdAssets[0].name);
+#if UNITY_6000_5_OR_NEWER
+                Assert.AreNotEqual(UnityEngine.EntityId.None, response.createdAssets[0].instanceId);
+#else
                 Assert.NotZero(response.createdAssets[0].instanceId);
+#endif
 
                 var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
                 Assert.IsNotNull(controller, "AnimatorController should exist at given path");

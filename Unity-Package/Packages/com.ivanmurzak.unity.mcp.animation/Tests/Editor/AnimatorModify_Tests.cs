@@ -1207,7 +1207,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 Assert.IsNotNull(response.modifiedAsset);
                 Assert.AreEqual(controllerEx.AssetPath, response.modifiedAsset!.path);
                 Assert.AreEqual("TestController", response.modifiedAsset.name);
+#if UNITY_6000_5_OR_NEWER
+                Assert.AreNotEqual(UnityEngine.EntityId.None, response.modifiedAsset.instanceId);
+#else
                 Assert.NotZero(response.modifiedAsset.instanceId);
+#endif
             }).Execute();
         }
 
