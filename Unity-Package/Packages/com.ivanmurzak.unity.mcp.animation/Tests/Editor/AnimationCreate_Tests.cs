@@ -51,7 +51,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 Assert.AreEqual(1, response.createdAssets!.Count);
                 Assert.AreEqual(assetPath, response.createdAssets[0].path);
                 Assert.AreEqual("TestClip", response.createdAssets[0].name);
+#if UNITY_6000_5_OR_NEWER
+                Assert.AreNotEqual(UnityEngine.EntityId.None, response.createdAssets[0].instanceId);
+#else
                 Assert.NotZero(response.createdAssets[0].instanceId);
+#endif
 
                 var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
                 Assert.IsNotNull(clip, "Asset should exist at the given path");
@@ -185,7 +189,11 @@ namespace com.IvanMurzak.Unity.MCP.Animation.Editor.Tests
                 Assert.IsNotNull(response2.createdAssets);
                 Assert.AreEqual(1, response2.createdAssets!.Count);
                 Assert.AreEqual(assetPath, response2.createdAssets[0].path);
+#if UNITY_6000_5_OR_NEWER
+                Assert.AreNotEqual(UnityEngine.EntityId.None, response2.createdAssets[0].instanceId);
+#else
                 Assert.NotZero(response2.createdAssets[0].instanceId);
+#endif
 
                 var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetPath);
                 Assert.IsNotNull(clip, "Asset should still exist after overwrite");
