@@ -65,10 +65,10 @@ CHECKER_VERSION = "1"
 # warned) rather than asserting against a placeholder.
 # --------------------------------------------------------------------------- #
 
-EXPECTED_MCPPLUGIN = "7.1.1"
-EXPECTED_REFLECTORNET = "5.3.2"
-X_SYNCED_FOR = "0.84.3"
-KNOWN_GOOD_UNITY_VERSIONS = ["2022.3.62f3", "2023.2.22f1", "6000.3.1f1", "6000.5.0b3", "6000.6.0a2"]
+EXPECTED_MCPPLUGIN = "8.6.0"
+EXPECTED_REFLECTORNET = "5.4.1"
+X_SYNCED_FOR = "0.93.1"
+KNOWN_GOOD_UNITY_VERSIONS = ["2022.3.62f3", "2023.2.22f1", "6000.3.1f1", "6000.5.0b3", "6000.6.0a2", "6000.6.3f1"]
 
 _PLACEHOLDER_PREFIX = "__INJECT_"
 _SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.\-+]+)?$")
