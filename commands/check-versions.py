@@ -25,8 +25,18 @@ Assertions (04-version-sync §4.2 — all messages are ``file:line``-precise):
       project's ``Assets/Plugins/NuGet/`` (skipped for the Template — D12/D14).
   C7  Unity-version lockstep: every ``Unity-Tests/<ver>`` also exists in the
       synced known-good list of core canonical-drop versions.
+  C8  Compile-gate defines: in every project's ``ProjectSettings.asset``
+      ``scriptingDefineSymbols``, each platform line carrying the core's ready
+      define (``UNITY_MCP_READY``) carries **exactly one** dependency-generation
+      define (``<prefix><n>``, e.g. ``UNITY_MCP_DEPS_6``) and every such line in
+      the extension carries the **same** one (structural — always strict); and
+      that one equals the core's current generation (**degrades to a WARNING**
+      when X != X_SYNCED_FOR, like C5). Extension CI skips the NuGet resolver, so
+      a missing define drops the core out of compilation (CS0234) — and the
+      cascade (03b) pushes without waiting for that CI. A line without the ready
+      define is never checked, so the Template (no ready define) passes trivially.
 
-The Template (D12/D14) runs the **text-level subset only: C1–C4 + C7** — C5/C6
+The Template (D12/D14) runs the **text-level subset only: C1–C4 + C7 + C8** — C5/C6
 are skipped because it is never DLL-injected nor opened in Unity. A lock's core
 entry with ``source == "local"`` is a Template scaffold reference (a ``file:``
 path, not a published registry pin), so C2/C4 do not apply to it — real
@@ -56,7 +66,7 @@ OPENUPM_URL = "https://package.openupm.com"
 # Bump when the checker's *logic* changes. Travels verbatim into each synced
 # copy; cascade step 03b compares it across the fleet to detect checker drift
 # (04 §4.3). This is authored, NOT injected — it is the checker's own version.
-CHECKER_VERSION = "1"
+CHECKER_VERSION = "2"  # 2: + C8 compile-gate defines
 
 # --------------------------------------------------------------------------- #
 # Injected-at-sync-time constants (placeholder sentinels in the authored copy).
@@ -67,8 +77,13 @@ CHECKER_VERSION = "1"
 
 EXPECTED_MCPPLUGIN = "8.6.0"
 EXPECTED_REFLECTORNET = "5.4.1"
-X_SYNCED_FOR = "0.93.1"
+X_SYNCED_FOR = "0.93.2"
 KNOWN_GOOD_UNITY_VERSIONS = ["2022.3.62f3", "2023.2.22f1", "6000.3.1f1", "6000.5.0b3", "6000.6.0a2", "6000.6.3f1"]
+# C8 — the core's compile-gate defines (NuGetConfig.cs names, cross-checked
+# against the core asmdefs' defineConstraints by the injector).
+READY_DEFINE = "UNITY_MCP_READY"
+GENERATION_DEFINE_PREFIX = "UNITY_MCP_DEPS_"
+EXPECTED_GENERATION_DEFINE = "UNITY_MCP_DEPS_6"
 
 _PLACEHOLDER_PREFIX = "__INJECT_"
 _SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.\-+]+)?$")
@@ -178,6 +193,29 @@ def find_package_json(ext_root: Path) -> Path | None:
     return None
 
 
+# `  scriptingDefineSymbols:` opens a YAML mapping of `    <Platform>: A;B;C`
+# (platform keys may contain spaces). Mirrors cli._SDS_HEADER_RE/_SDS_ENTRY_RE.
+_SDS_HEADER_RE = re.compile(r"^(?P<indent> *)scriptingDefineSymbols:[ \t]*$")
+_SDS_ENTRY_RE = re.compile(r"^(?P<indent> +)(?P<key>[^:]+): ?(?P<value>.*?)$")
+
+
+def _scripting_define_entries(text: str) -> list[tuple[int, str, list[str]]]:
+    """``(line, platform, symbols)`` for every ``scriptingDefineSymbols`` entry."""
+    out: list[tuple[int, str, list[str]]] = []
+    block_indent: int | None = None
+    for i, line in enumerate(text.splitlines(), start=1):
+        if block_indent is not None:
+            m = _SDS_ENTRY_RE.match(line)
+            if m and len(m.group("indent")) > block_indent:
+                out.append((i, m.group("key"), m.group("value").split(";")))
+                continue
+            block_indent = None
+        h = _SDS_HEADER_RE.match(line)
+        if h:
+            block_indent = len(h.group("indent"))
+    return out
+
+
 def _read_json(path: Path) -> dict | None:
     try:
         return json.loads(path.read_text(encoding="utf-8", errors="replace"))
@@ -198,9 +236,18 @@ def check_extension(
     expected_reflectornet: str | None = None,
     x_synced_for: str | None = None,
     known_good_unity_versions: list[str] | None = None,
+    ready_define: str | None = None,
+    generation_define_prefix: str | None = None,
+    expected_generation_define: str | None = None,
 ) -> tuple[list[Violation], list[Warning]]:
-    """Run C1–C7 against an extension checkout. Injected expectations default to
+    """Run C1–C8 against an extension checkout. Injected expectations default to
     this module's (possibly placeholder) constants; tests pass them explicitly."""
+    if ready_define is None:
+        ready_define = READY_DEFINE
+    if generation_define_prefix is None:
+        generation_define_prefix = GENERATION_DEFINE_PREFIX
+    if expected_generation_define is None:
+        expected_generation_define = EXPECTED_GENERATION_DEFINE
     if expected_mcpplugin is None:
         expected_mcpplugin = EXPECTED_MCPPLUGIN
     if expected_reflectornet is None:
@@ -330,11 +377,57 @@ def check_extension(
                         f"Unity-Tests version {d.name!r} not in the known-good core "
                         f"canonical-drop list {sorted(known_good_unity_versions)}"))
 
+    # --- C8: compile-gate defines in every ProjectSettings.asset -------------
+    # Runs for the Template too (text-level); a line without the ready define is
+    # never checked, so a Template (none) passes trivially.
+    if not (_is_placeholder(ready_define) or _is_placeholder(generation_define_prefix)):
+        gen_re = re.compile(re.escape(generation_define_prefix) + r"\d+")
+        seen: dict[str, str] = {}  # generation define -> first location carrying it
+        for project in projects:
+            asset = project / "ProjectSettings" / "ProjectSettings.asset"
+            if not asset.is_file():
+                continue
+            text = asset.read_text(encoding="utf-8", errors="replace")
+            for line, key, symbols in _scripting_define_entries(text):
+                if ready_define not in symbols:
+                    continue
+                loc = _loc(asset, ext_root, line)
+                gens = [s for s in symbols if gen_re.fullmatch(s)]
+                if len(gens) != 1:
+                    violations.append(Violation(
+                        "C8", loc,
+                        f"{key!r} carries {ready_define} but "
+                        + (f"no {generation_define_prefix}<n> define" if not gens
+                           else f"{len(gens)} generation defines {gens}")
+                        + " — the core's gated assemblies will not compile in CI"))
+                    continue
+                seen.setdefault(gens[0], loc)
+        if len(seen) > 1:
+            violations.append(Violation(
+                "C8", ".",
+                "projects disagree on the dependency-generation define: "
+                + ", ".join(f"{g} (first at {where})" for g, where in sorted(seen.items()))))
+        elif seen and not _is_placeholder(expected_generation_define):
+            (got, where), = seen.items()
+            if got != expected_generation_define:
+                degrade = _is_placeholder(x_synced_for) or (pin_x is not None and pin_x != x_synced_for)
+                if degrade:
+                    warnings.append(Warning(
+                        "C8", where,
+                        f"generation define {got} unverified for X={pin_x!r} "
+                        f"(synced expectation {expected_generation_define} is for "
+                        f"X_SYNCED_FOR={x_synced_for!r})"))
+                else:
+                    violations.append(Violation(
+                        "C8", where,
+                        f"generation define {got} != core's {expected_generation_define} "
+                        f"for X={pin_x!r}"))
+
     return violations, warnings
 
 
 def _is_template(ext_root: Path, pkg_json: Path | None, force: bool) -> bool:
-    """A Template checkout runs the C1–C4+C7 subset (C5/C6 skipped). Detected by
+    """A Template checkout runs the C1–C4+C7+C8 subset (C5/C6 skipped). Detected by
     the --template flag, the canonical folder name, or a placeholder package id
     (its ``name`` is not a branded ``com.ivanmurzak.unity.mcp.<name>`` id)."""
     if force or ext_root.name == TEMPLATE_EXTENSION:
@@ -356,7 +449,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("extension_root", nargs="?", default=".",
                         help="Extension repo root (default: current directory).")
     parser.add_argument("--template", action="store_true",
-                        help="Force Template mode (C1-C4+C7 subset; skip C5/C6).")
+                        help="Force Template mode (C1-C4+C7+C8 subset; skip C5/C6).")
     try:
         args = parser.parse_args(argv)
     except SystemExit as exc:  # argparse exits 2 on bad usage — honor the contract
@@ -375,7 +468,7 @@ def main(argv: list[str] | None = None) -> int:
     template = _is_template(ext_root, pkg_json, args.template)
     violations, warnings = check_extension(ext_root, template=template)
 
-    mode = "Template subset (C1-C4+C7)" if template else "full (C1-C7)"
+    mode = "Template subset (C1-C4+C7+C8)" if template else "full (C1-C8)"
     for w in warnings:
         print(f"WARNING {w.code} {w.location}: {w.message}")
     if violations:
