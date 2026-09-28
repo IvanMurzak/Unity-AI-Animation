@@ -162,13 +162,15 @@ jobs:
         env:
           PROJECT_PATH: ${{ inputs.projectPath }}
         run: |
+          set +e +o pipefail
           D="$RUNNER_TEMP/diag"; mkdir -p "$D"; echo "DIAG_DIR=$D" >> "$GITHUB_ENV"
           echo "cache-hit=${{ steps.lib_cache.outputs.cache-hit }}"
           nproc; free -m; df -h /dev/shm; cat /etc/docker/daemon.json 2>/dev/null || true
           if [ -d "$PROJECT_PATH/Library" ]; then
             du -sh "$PROJECT_PATH/Library"
             du -sh "$PROJECT_PATH"/Library/* 2>/dev/null | sort -h | tail -25
-            [ -d "$PROJECT_PATH/Library/DataStore" ] && { du -sh "$PROJECT_PATH/Library/DataStore"; ls -laR "$PROJECT_PATH/Library/DataStore" | head -80; }
+            [ -d "$PROJECT_PATH/Library/DataStore" ] && { du -sh "$PROJECT_PATH/Library/DataStore"; find "$PROJECT_PATH/Library/DataStore" -type f | wc -l; find "$PROJECT_PATH/Library/DataStore" -maxdepth 1 -type f -ls; }
+            for f in "$PROJECT_PATH"/Library/*.pid "$PROJECT_PATH"/Library/*lock*; do [ -f "$f" ] && echo "$f: $(cat "$f" | head -c 200)"; done
             ls -la "$PROJECT_PATH/Library" | head -60
             find "$PROJECT_PATH/Library" -maxdepth 2 -iname '*lock*' -ls 2>/dev/null | head -20
           else
@@ -198,6 +200,7 @@ jobs:
               sleep 2
             done' > "$D/docker-sampler.log" 2>&1 < /dev/null &
           echo started
+          exit 0
 
       - uses: game-ci/unity-test-runner@08fd329f00a18efa297140b14ac28ebce742759e # node24 runtime (PR #304); revert to @v4 once game-ci moves the tag
         id: tests
@@ -222,11 +225,13 @@ jobs:
         env:
           PROJECT_PATH: ${{ inputs.projectPath }}
         run: |
+          set +e +o pipefail
           D="$DIAG_DIR"; pkill -f 'while true' || true
           free -m; df -h /dev/shm
           du -sh "$PROJECT_PATH/Library" 2>/dev/null || true
           du -sh "$PROJECT_PATH"/Library/* 2>/dev/null | sort -h | tail -25
-          du -sh "$PROJECT_PATH/Library/DataStore" 2>/dev/null && ls -laR "$PROJECT_PATH/Library/DataStore" | head -80
+          du -sh "$PROJECT_PATH/Library/DataStore" 2>/dev/null && find "$PROJECT_PATH/Library/DataStore" -maxdepth 1 -type f -ls
+          for f in "$PROJECT_PATH"/Library/*.pid "$PROJECT_PATH"/Library/*lock*; do [ -f "$f" ] && echo "$f: $(cat "$f" | head -c 200)"; done
           echo "----- signal trace (sig 9/6/7/11/15)"
           sudo cat "$TRACEFS/trace" > "$D/signals.log" 2>&1 || true
           grep -v '^#' "$D/signals.log" | tail -60 || true
@@ -238,6 +243,7 @@ jobs:
           echo "----- mem-sampler: peak used / min available"
           awk '/^Mem:/ {if ($3>u) u=$3; if (a==0 || $7<a) a=$7} END {print "peak used MiB=" u, "min available MiB=" a}' "$D/mem-sampler.log" || true
           grep -E 'mem=' "$D/docker-sampler.log" | tail -15 || true
+          exit 0
 
       - uses: actions/upload-artifact@v6
         if: always()
