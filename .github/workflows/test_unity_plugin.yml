@@ -181,6 +181,8 @@ jobs:
           echo "TRACEFS=$T" >> "$GITHUB_ENV"
           sudo sh -c "echo 16384 > $T/buffer_size_kb; echo 'sig == 9 || sig == 6 || sig == 7 || sig == 11 || sig == 15' > $T/events/signal/signal_generate/filter; echo 1 > $T/events/signal/signal_generate/enable" || echo "tracefs unavailable"
           [ -d "$T/events/oom" ] && sudo sh -c "echo 1 > $T/events/oom/mark_victim/enable" || true
+          # kill(2) arguments as the CALLER sees them (container-namespace pid) - links a kill to a pid file
+          sudo sh -c "echo 'sig == 9' > $T/events/syscalls/sys_enter_kill/filter; echo 1 > $T/events/syscalls/sys_enter_kill/enable" || echo "sys_enter_kill unavailable"
           sudo dmesg -C || true
           # host memory / process sampler (1s) + docker stats / container shm sampler (2s)
           setsid nohup bash -c '
@@ -232,7 +234,7 @@ jobs:
           du -sh "$PROJECT_PATH"/Library/* 2>/dev/null | sort -h | tail -25
           du -sh "$PROJECT_PATH/Library/DataStore" 2>/dev/null && find "$PROJECT_PATH/Library/DataStore" -maxdepth 1 -type f -ls
           for f in "$PROJECT_PATH"/Library/*.pid "$PROJECT_PATH"/Library/*lock*; do [ -f "$f" ] && echo "$f: $(cat "$f" | head -c 200)"; done
-          echo "----- signal trace (sig 9/6/7/11/15)"
+          echo "----- signal trace (sig 9/6/7/11/15) + kill(2) calls with sig 9"
           sudo cat "$TRACEFS/trace" > "$D/signals.log" 2>&1 || true
           grep -v '^#' "$D/signals.log" | tail -60 || true
           echo "----- dmesg"
