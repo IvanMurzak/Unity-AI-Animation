@@ -104,11 +104,13 @@ jobs:
           if [ "$major" -lt 6000 ] || { [ "$major" -eq 6000 ] && [ "$minor" -lt 6 ]; }; then
             echo "use=true" >> "$GITHUB_OUTPUT"
           else
-            echo "use=false" >> "$GITHUB_OUTPUT"
-            echo "Unity $UNITY_VERSION: Library cache skipped (no restore, no save) - a warm 6000.6+ Library is SIGKILLed at startup"
+            # EXPERIMENT (exp/unity-6000.6-library-cache): cache re-enabled for 6000.6+ to find the root cause
+            echo "use=true" >> "$GITHUB_OUTPUT"
+            echo "Unity $UNITY_VERSION: EXPERIMENT - Library cache ENABLED for 6000.6+"
           fi
 
       - uses: actions/cache@v5
+        id: lib_cache
         if: steps.library_cache.outputs.use == 'true'
         with:
           path: |
@@ -152,6 +154,51 @@ jobs:
         run: echo "image=unityci/editor:ubuntu-${{ inputs.unityVersion }}-${{ matrix.platform }}-3" >> $GITHUB_OUTPUT
         shell: bash
 
+      # --------------------------------------------------------------------- #
+      # EXPERIMENT diagnostics: memory / shm / Library state + SIGKILL tracer
+      # --------------------------------------------------------------------- #
+      - name: "DIAG: before Unity + start samplers"
+        shell: bash
+        env:
+          PROJECT_PATH: ${{ inputs.projectPath }}
+        run: |
+          D="$RUNNER_TEMP/diag"; mkdir -p "$D"; echo "DIAG_DIR=$D" >> "$GITHUB_ENV"
+          echo "cache-hit=${{ steps.lib_cache.outputs.cache-hit }}"
+          nproc; free -m; df -h /dev/shm; cat /etc/docker/daemon.json 2>/dev/null || true
+          if [ -d "$PROJECT_PATH/Library" ]; then
+            du -sh "$PROJECT_PATH/Library"
+            du -sh "$PROJECT_PATH"/Library/* 2>/dev/null | sort -h | tail -25
+            [ -d "$PROJECT_PATH/Library/DataStore" ] && { du -sh "$PROJECT_PATH/Library/DataStore"; ls -laR "$PROJECT_PATH/Library/DataStore" | head -80; }
+            ls -la "$PROJECT_PATH/Library" | head -60
+            find "$PROJECT_PATH/Library" -maxdepth 2 -iname '*lock*' -ls 2>/dev/null | head -20
+          else
+            echo "no Library (cold)"
+          fi
+          # kernel signal tracer: who sends SIGKILL/SIGBUS/SIGSEGV/SIGABRT/SIGTERM to whom
+          T=/sys/kernel/tracing; [ -d "$T/events" ] || T=/sys/kernel/debug/tracing
+          echo "TRACEFS=$T" >> "$GITHUB_ENV"
+          sudo sh -c "echo 16384 > $T/buffer_size_kb; echo 'sig == 9 || sig == 6 || sig == 7 || sig == 11 || sig == 15' > $T/events/signal/signal_generate/filter; echo 1 > $T/events/signal/signal_generate/enable" || echo "tracefs unavailable"
+          [ -d "$T/events/oom" ] && sudo sh -c "echo 1 > $T/events/oom/mark_victim/enable" || true
+          sudo dmesg -C || true
+          # host memory / process sampler (1s) + docker stats / container shm sampler (2s)
+          setsid nohup bash -c '
+            while true; do
+              echo "=== $(date -u +%T.%N | cut -c1-12)"
+              free -m | sed -n 2,3p
+              ps -eo pid,ppid,rss,vsz,etimes,stat,comm --sort=-rss | head -10
+              sleep 1
+            done' > "$D/mem-sampler.log" 2>&1 < /dev/null &
+          setsid nohup bash -c '
+            while true; do
+              for c in $(docker ps -q); do
+                echo "=== $(date -u +%T) $c"
+                docker stats --no-stream --format "{{.Name}} cpu={{.CPUPerc}} mem={{.MemUsage}} {{.MemPerc}} pids={{.PIDs}}" "$c"
+                docker exec "$c" sh -c "df -m /dev/shm | tail -1; ls -la /dev/shm | head -20" 2>&1
+              done
+              sleep 2
+            done' > "$D/docker-sampler.log" 2>&1 < /dev/null &
+          echo started
+
       - uses: game-ci/unity-test-runner@08fd329f00a18efa297140b14ac28ebce742759e # node24 runtime (PR #304); revert to @v4 once game-ci moves the tag
         id: tests
         env:
@@ -168,6 +215,35 @@ jobs:
           checkName: ${{ inputs.unityVersion }} ${{ inputs.testMode }} ${{ matrix.platform }} Test Results
           artifactsPath: artifacts-${{ inputs.unityVersion }}-${{ inputs.testMode }}-${{ matrix.platform }}
           customParameters: -CI true -GITHUB_ACTIONS true
+
+      - name: "DIAG: after Unity"
+        if: always()
+        shell: bash
+        env:
+          PROJECT_PATH: ${{ inputs.projectPath }}
+        run: |
+          D="$DIAG_DIR"; pkill -f 'while true' || true
+          free -m; df -h /dev/shm
+          du -sh "$PROJECT_PATH/Library" 2>/dev/null || true
+          du -sh "$PROJECT_PATH"/Library/* 2>/dev/null | sort -h | tail -25
+          du -sh "$PROJECT_PATH/Library/DataStore" 2>/dev/null && ls -laR "$PROJECT_PATH/Library/DataStore" | head -80
+          echo "----- signal trace (sig 9/6/7/11/15)"
+          sudo cat "$TRACEFS/trace" > "$D/signals.log" 2>&1 || true
+          grep -v '^#' "$D/signals.log" | tail -60 || true
+          echo "----- dmesg"
+          sudo dmesg -T > "$D/dmesg.log" 2>&1 || true
+          tail -80 "$D/dmesg.log"
+          grep -iE 'oom|killed process|out of memory' "$D/dmesg.log" || echo "no oom lines in dmesg"
+          sudo journalctl -k --no-pager 2>/dev/null | grep -iE 'oom|killed process|out of memory' | tail -20 || true
+          echo "----- mem-sampler: peak used / min available"
+          awk '/^Mem:/ {if ($3>u) u=$3; if (a==0 || $7<a) a=$7} END {print "peak used MiB=" u, "min available MiB=" a}' "$D/mem-sampler.log" || true
+          grep -E 'mem=' "$D/docker-sampler.log" | tail -15 || true
+
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: diag ${{ inputs.unityVersion }} ${{ inputs.testMode }} ${{ matrix.platform }}
+          path: ${{ env.DIAG_DIR }}
 
       # --------------------------------------------------------------------- #
       - uses: actions/upload-artifact@v6
