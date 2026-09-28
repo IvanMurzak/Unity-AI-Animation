@@ -118,6 +118,15 @@ jobs:
             ~/.cache/unity3d
           key: ${{ inputs.unityVersion }} ${{ inputs.testMode }} on ${{ matrix.platform }}
 
+      # A restored Library carries the PID files of the run that saved it. Unity 6000.6 reads
+      # Library/burst.pid at startup and SIGKILLs that PID to reap a "stale" Burst compiler, but PIDs in a
+      # fresh container are reused - often by one of the new editor's own threads - so the editor kills
+      # itself (exit 137). Those files are never valid in a new container: drop them after the restore.
+      - name: Drop stale PID files from the restored Library
+        if: steps.library_cache.outputs.use == 'true'
+        shell: bash
+        run: rm -fv "${{ inputs.projectPath }}"/Library/burst.pid "${{ inputs.projectPath }}"/Library/ilpp.pid
+
       # --------------------------------------------------------------------- #
       # Unity 6000.6+ refuses to start its licensing client unless the container has >= 1 GiB of
       # /dev/shm ("Insufficient shared memory available - if using Docker, please run the container
