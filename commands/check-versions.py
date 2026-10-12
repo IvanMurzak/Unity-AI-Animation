@@ -75,15 +75,15 @@ CHECKER_VERSION = "2"  # 2: + C8 compile-gate defines
 # warned) rather than asserting against a placeholder.
 # --------------------------------------------------------------------------- #
 
-EXPECTED_MCPPLUGIN = "8.6.0"
+EXPECTED_MCPPLUGIN = "8.7.0"
 EXPECTED_REFLECTORNET = "5.4.1"
-X_SYNCED_FOR = "0.93.2"
+X_SYNCED_FOR = "0.93.3"
 KNOWN_GOOD_UNITY_VERSIONS = ["2022.3.62f3", "2023.2.22f1", "6000.3.1f1", "6000.5.0b3", "6000.6.0a2", "6000.6.3f1"]
 # C8 — the core's compile-gate defines (NuGetConfig.cs names, cross-checked
 # against the core asmdefs' defineConstraints by the injector).
 READY_DEFINE = "UNITY_MCP_READY"
 GENERATION_DEFINE_PREFIX = "UNITY_MCP_DEPS_"
-EXPECTED_GENERATION_DEFINE = "UNITY_MCP_DEPS_6"
+EXPECTED_GENERATION_DEFINE = "UNITY_MCP_DEPS_7"
 
 _PLACEHOLDER_PREFIX = "__INJECT_"
 _SEMVER_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.\-+]+)?$")

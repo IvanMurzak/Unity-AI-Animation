@@ -38,7 +38,8 @@ $TargetFiles = @(
     "Unity-Package/Packages/packages-lock.json",
     "Unity-Tests/2022.3.62f3/Packages/packages-lock.json",
     "Unity-Tests/2023.2.22f1/Packages/packages-lock.json",
-    "Unity-Tests/6000.3.1f1/Packages/packages-lock.json"
+    "Unity-Tests/6000.3.1f1/Packages/packages-lock.json",
+    "Unity-Tests/6000.6.3f1/Packages/packages-lock.json"
 )
 
 function Write-ColorText {
