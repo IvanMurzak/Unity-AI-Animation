@@ -1,0 +1,50 @@
+Unity-Package/Assets/root/Tests/Runtime/com.IvanMurzak.Unity.MCP.Animation.Tests.asmdef
+  a33c68edc6aa4eae 8-10,24-25,27,29-30
+Unity-Package/Assets/root/Runtime/com.IvanMurzak.Unity.MCP.Animation.Runtime.asmdef
+  a33c68edc6aa4eae 3,13-15
+Unity-Package/Packages/manifest.json
+  h_9a61b2ff2f3edc 3,38
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Tests/Files/scopes_partial_1.json"
+  a33c68edc6aa4eae 13
+Unity-Package/Packages/packages-lock.json
+  a33c68edc6aa4eae 4,10,100
+Unity-Package/ProjectSettings/PackageManagerSettings.asset
+  a33c68edc6aa4eae 38,43-44
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Tests/Files/Correct/correct_manifest.json"
+  a33c68edc6aa4eae 14
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Tests/Files/scopes_partial_3.json"
+  a33c68edc6aa4eae 14
+Installer/ProjectSettings/ProjectSettings.asset
+  a33c68edc6aa4eae 160,166-170,176,190,194,196,221,229-231,242-245,255-256,269-270,290-382,412-418,427-460,493-495,497,504,524-531,562-563,570,575-588,590,618-620,636,640,647-648,676,684-688,692,707,709-719,723,736-737,741-743,745,750-751,755,759,762-763
+Unity-Package/Assets/root/Tests/Editor/com.IvanMurzak.Unity.MCP.Animation.Editor.Tests.asmdef
+  a33c68edc6aa4eae 10-12,28-29,31,33-34,38
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Tests/ManifestInstallerTests.cs"
+  a33c68edc6aa4eae 10,24-27,29-30,33-35,39-42,45-46,48-52,54,56-58,60-61,63-65
+Unity-Package/Assets/root/Editor/Scripts/com.IvanMurzak.Unity.MCP.Animation.Editor.asmdef
+  a33c68edc6aa4eae 3,17-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "23ff130cacb221455fc4aa52b0ee26a538d6040e",
+  "prompts": {
+    "a33c68edc6aa4eae": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "29834749-6539-49c9-89f7-1d2dc7cf09bb",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Ivan Murzak",
+      "messages": [],
+      "total_additions": 291,
+      "total_deletions": 717,
+      "accepted_lines": 417,
+      "overriden_lines": 0
+    }
+  },
+  "humans": {
+    "h_9a61b2ff2f3edc": {
+      "author": "Ivan Murzak"
+    }
+  }
+}

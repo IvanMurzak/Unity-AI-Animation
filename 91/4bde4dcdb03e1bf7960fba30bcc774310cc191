@@ -1,0 +1,23 @@
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Tests/ManifestInstallerTests.cs"
+  2ecbd22cd5a6e83a 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "914bde4dcdb03e1bf7960fba30bcc774310cc191",
+  "prompts": {
+    "2ecbd22cd5a6e83a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "85521541-58d6-4265-b0ae-fe905775f777",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>",
+      "messages": [],
+      "total_additions": 71,
+      "total_deletions": 71,
+      "accepted_lines": 11,
+      "overriden_lines": 0
+    }
+  }
+}

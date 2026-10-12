@@ -1,0 +1,16 @@
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Installer.cs"
+  h_8325a340bf5897 22
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/package.json
+  h_8325a340bf5897 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "107bbfbe24863c3ef0f2c11ff6e2576ef7005cdb",
+  "prompts": {},
+  "humans": {
+    "h_8325a340bf5897": {
+      "author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+Unity-Package/Assets/root/Editor/Scripts/Tools/Animation.Modify.cs
+  40066b6817017475 195-222
+Unity-Package/Assets/root/Tests/Editor/AnimatorModify_Tests.cs
+  40066b6817017475 96-97,340,358-363
+Unity-Package/Assets/root/Tests/Editor/AnimationGetData_Tests.cs
+  40066b6817017475 69-70,133
+Unity-Package/Assets/root/Tests/Editor/AnimationModify_Tests.cs
+  40066b6817017475 89-90,240-242
+Unity-Package/Assets/root/Tests/Editor/AnimatorGetData_Tests.cs
+  40066b6817017475 69-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "306497a588be2b32a4c89547809d734a488ce8b3",
+  "prompts": {
+    "40066b6817017475": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9bceb68f-1bf0-466a-8851-3c6da2e6c3f8",
+        "model": "claude-haiku-4-5-20251001"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>",
+      "messages": [],
+      "total_additions": 2200,
+      "total_deletions": 2172,
+      "accepted_lines": 453,
+      "overriden_lines": 1
+    }
+  }
+}
