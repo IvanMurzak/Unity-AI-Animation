@@ -1,0 +1,51 @@
+"Installer/Assets/com.IvanMurzak/AI Animation Installer/Installer.cs"
+  s_e19ebe83cb6110::t_9ed9c34dc90eef 22
+Unity-Package/Assets/Plugins/NuGet/.nuget-installed.json
+  s_e19ebe83cb6110::t_d1c6816778427a 4,10
+Unity-Package/Packages/com.ivanmurzak.unity.mcp.animation/package.json
+  s_e19ebe83cb6110::t_bdd8b1c3df9f4b 15,19
+Unity-Package/Packages/packages-lock.json
+  s_e19ebe83cb6110::t_b5d21d50480124 4,19
+Unity-Package/ProjectSettings/ProjectSettings.asset
+  s_e19ebe83cb6110::t_1a127f29a8b7ff 665-682
+Unity-Tests/2022.3.62f3/Assets/Plugins/NuGet/.nuget-installed.json
+  s_e19ebe83cb6110::t_6a358cb0a55226 4,10
+Unity-Tests/2022.3.62f3/Packages/packages-lock.json
+  s_e19ebe83cb6110::t_0d6106f6e1546a 4,19
+Unity-Tests/2022.3.62f3/ProjectSettings/ProjectSettings.asset
+  s_e19ebe83cb6110::t_ebd8644fb1e11b 747-764
+Unity-Tests/2023.2.22f1/Assets/Plugins/NuGet/.nuget-installed.json
+  s_e19ebe83cb6110::t_863d855671aee7 4,10
+Unity-Tests/2023.2.22f1/Packages/packages-lock.json
+  s_e19ebe83cb6110::t_35e3e5289b489a 4,19
+Unity-Tests/2023.2.22f1/ProjectSettings/ProjectSettings.asset
+  s_e19ebe83cb6110::t_6035541b90db74 656-672
+Unity-Tests/6000.3.1f1/Assets/Plugins/NuGet/.nuget-installed.json
+  s_e19ebe83cb6110::t_cd0d0a808e03b1 4,10
+Unity-Tests/6000.3.1f1/Packages/packages-lock.json
+  s_e19ebe83cb6110::t_3c0056a442d301 4,19
+Unity-Tests/6000.3.1f1/ProjectSettings/ProjectSettings.asset
+  s_e19ebe83cb6110::t_be460ffbfaa2a5 832-850
+Unity-Tests/6000.6.3f1/Assets/Plugins/NuGet/.nuget-installed.json
+  s_e19ebe83cb6110::t_6b30a4d5183bb1 4,10
+Unity-Tests/6000.6.3f1/Packages/packages-lock.json
+  s_e19ebe83cb6110::t_d2b8734d2296f3 4,19
+Unity-Tests/6000.6.3f1/ProjectSettings/ProjectSettings.asset
+  s_e19ebe83cb6110::t_fda90a23a172fb 593-611
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "68d2c8e04fe848c32a68358367534966e67c2e6e",
+  "prompts": {},
+  "sessions": {
+    "s_e19ebe83cb6110": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "514df444-7709-4c0d-be94-41a9023e64ee",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ivan Murzak <Ivan.D.Murzak@gmail.com>"
+    }
+  }
+}
