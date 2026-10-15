@@ -33,19 +33,19 @@ AI-powered tools for Unity animation workflow. Create and modify AnimationClips 
 | 2023.2.22f1   | [![r](https://github.com/IvanMurzak/Unity-AI-Animation/workflows/release/badge.svg?job=test-unity-2023-2-22f1-editmode)](https://github.com/IvanMurzak/Unity-AI-Animation/actions/workflows/release.yml) | [![r](https://github.com/IvanMurzak/Unity-AI-Animation/workflows/release/badge.svg?job=test-unity-2023-2-22f1-playmode)](https://github.com/IvanMurzak/Unity-AI-Animation/actions/workflows/release.yml) | [![r](https://github.com/IvanMurzak/Unity-AI-Animation/workflows/release/badge.svg?job=test-unity-2023-2-22f1-standalone)](https://github.com/IvanMurzak/Unity-AI-Animation/actions/workflows/release.yml) |
 | 6000.3.1f1    | [![r](https://github.com/IvanMurzak/Unity-AI-Animation/workflows/release/badge.svg?job=test-unity-6000-3-1f1-editmode)](https://github.com/IvanMurzak/Unity-AI-Animation/actions/workflows/release.yml)  | [![r](https://github.com/IvanMurzak/Unity-AI-Animation/workflows/release/badge.svg?job=test-unity-6000-3-1f1-playmode)](https://github.com/IvanMurzak/Unity-AI-Animation/actions/workflows/release.yml)  | [![r](https://github.com/IvanMurzak/Unity-AI-Animation/workflows/release/badge.svg?job=test-unity-6000-3-1f1-standalone)](https://github.com/IvanMurzak/Unity-AI-Animation/actions/workflows/release.yml)  |
 
-## AI Animation Tools
+## RQL (no extension tools)
 
-AnimationClip tools:
+With Unity-MCP 1.0.0 this package adds no MCP tools: it contributes an RQL module, so agents use
+`rql-query` / `rql-mutate` (the `unity-rql` skill carries the full guide with examples).
 
-- `animation-create` - Create AnimationClip asset files (.anim)
-- `animation-get-data` - Get AnimationClip data (curves, events, frame rate, wrap mode)
-- `animation-modify` - Modify AnimationClip (set/remove curves, add events, set properties)
-
-AnimatorController tools:
-
-- `animator-create` - Create AnimatorController asset files (.controller)
-- `animator-get-data` - Get AnimatorController data (layers, states, parameters, transitions)
-- `animator-modify` - Modify AnimatorController (add/remove states, parameters, transitions)
+| Former tool | RQL |
+| --- | --- |
+| `animation-create` | `animation \| call CreateClip("Assets/Animations/Walk.anim", 30, true)` (path, frameRate, loop) |
+| `animation-get-data` | `unity.asset("….anim") \| select name length frameRate isLooping`, `… \| get curves \| select path type property keys`, `… \| get events` |
+| `animation-modify` | `call SetCurve("", "Transform", "localPosition.y", [[0, 0], [1, 2]])`, `RemoveCurve`, `ClearCurves`, `AddEvent(0.5, "Footstep")`, `RemoveEvent`, `ClearEvents`; `set frameRate = 30, wrapMode = "Loop", settings.loopTime = true`, `set curves[0].keys[1].value = 2`, `set events[0].time = 0.25` |
+| `animator-create` | `animation \| call CreateController("Assets/Animations/Player.controller")` |
+| `animator-get-data` | `unity.asset("….controller") \| get layers \| get states \| select name speed motion.name transitions.destinationState.name`, `… \| get parameters` |
+| `animator-modify` | `call AddParameter("Speed", "Float")`, `RemoveParameter`, `AddLayer`, `RemoveLayer`, `AddState("Walk", unity.asset("….anim"))`, `RemoveState`, `SetDefaultState`, `AddTransition("Idle", "Walk", "Speed", "Greater", 0.1)`, `AddAnyStateTransition`, `RemoveTransition`; `… \| get states \| where name == "Walk" \| set speed = 1.5` |
 
 ## Installation
 
