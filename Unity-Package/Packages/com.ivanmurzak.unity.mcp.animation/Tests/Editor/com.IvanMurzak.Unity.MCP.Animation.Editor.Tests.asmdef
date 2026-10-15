@@ -26,7 +26,10 @@
         "McpPlugin.dll",
         "McpPlugin.Common.dll",
         "R3.dll",
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Rql.Contracts.dll",
+        "Rql.Parser.dll",
+        "Rql.Execution.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
