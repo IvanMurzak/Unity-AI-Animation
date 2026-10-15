@@ -9,6 +9,7 @@
 */
 
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Rql;
@@ -44,16 +45,18 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         public string path => _binding.path;
 
         [RqlDescription("animated component type, e.g. SpriteRenderer")]
-        public string type => AnimationEdit.TypeName(_binding.type);
+        public string type => _binding.type.Name;
 
         [RqlDescription("animated property, e.g. m_Sprite")]
         public string property => _binding.propertyName;
 
         [RqlDescription("number of keyframes")]
-        public int keyCount => (AnimationUtility.GetObjectReferenceCurve(clip, _binding) ?? new ObjectReferenceKeyframe[0]).Length;
+        public int keyCount => Keys.Length;
 
         [RqlDescription("the keyframes: time (seconds) and value (the referenced object)")]
-        public List<ObjectReferenceKeyframe> keys => (AnimationUtility.GetObjectReferenceCurve(clip, _binding) ?? new ObjectReferenceKeyframe[0]).ToList();
+        public List<ObjectReferenceKeyframe> keys => Keys.ToList();
+
+        private ObjectReferenceKeyframe[] Keys => AnimationUtility.GetObjectReferenceCurve(clip, _binding) ?? Array.Empty<ObjectReferenceKeyframe>();
 
         [RqlCallable("replace every key: [{time: 0, value: unity.asset(\"….png\")}, …]; returns the key count")]
         public int SetKeys(List<ObjectReferenceKeyframe> keys)

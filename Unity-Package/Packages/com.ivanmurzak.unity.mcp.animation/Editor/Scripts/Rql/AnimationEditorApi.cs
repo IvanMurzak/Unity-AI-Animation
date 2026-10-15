@@ -34,7 +34,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
 
         [RqlDescription("every Animator component in the loaded scenes, inactive ones included")]
         public List<Animator> animators =>
-            RqlUnity.AllGameObjects().SelectMany(go => go.GetComponents<Animator>()).Where(a => a != null).ToList();
+            RqlUnity.RootGameObjects().SelectMany(root => root.GetComponentsInChildren<Animator>(true)).ToList();
 
         [RqlCallable("create an empty AnimationClip asset at path (\"Assets/…/Name.anim\", folders are created) with frameRate (default 60) " +
                      "and loop (Loop Time); returns the clip — then call SetCurve / AddEvent on unity.asset(path). Asset creation is not undone by Undo")]

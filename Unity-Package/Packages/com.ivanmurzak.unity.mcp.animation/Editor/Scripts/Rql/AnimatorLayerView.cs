@@ -55,8 +55,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         private AnimatorControllerLayer[] Layers()
         {
             var layers = controller.layers;
-            if (index < 0 || index >= layers.Length)
-                throw new ArgumentOutOfRangeException(nameof(index), $"layer index {index} is out of range: the controller has {layers.Length} layer(s)");
+            AnimationEdit.CheckIndex(index, layers.Length, "layer", "the controller");
             return layers;
         }
 

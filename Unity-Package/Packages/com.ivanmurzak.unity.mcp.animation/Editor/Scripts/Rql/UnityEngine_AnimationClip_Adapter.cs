@@ -143,8 +143,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         internal static int RemoveEvent(AnimationClip clip, int index)
         {
             var events = AnimationUtility.GetAnimationEvents(clip).ToList();
-            if (index < 0 || index >= events.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), $"event index {index} is out of range: the clip has {events.Count} event(s)");
+            CheckIndex(index, events.Count, "event", "the clip");
             events.RemoveAt(index);
             AnimationEdit.Edit(clip, "remove event", () => AnimationUtility.SetAnimationEvents(clip, events.ToArray()));
             return events.Count;
@@ -153,7 +152,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         internal static int ClearEvents(AnimationClip clip)
         {
             var count = AnimationUtility.GetAnimationEvents(clip).Length;
-            AnimationEdit.Edit(clip, "clear events", () => AnimationUtility.SetAnimationEvents(clip, new AnimationEvent[0]));
+            AnimationEdit.Edit(clip, "clear events", () => AnimationUtility.SetAnimationEvents(clip, Array.Empty<AnimationEvent>()));
             return count;
         }
 

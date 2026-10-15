@@ -44,17 +44,6 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
 
         // ------------------------------------------------------------ assets
 
-        public static void EnsureFolder(string? folder)
-        {
-            if (string.IsNullOrEmpty(folder)) return;
-            folder = folder!.Replace('\\', '/').TrimEnd('/');
-            if (AssetDatabase.IsValidFolder(folder)) return;
-            var parent = Path.GetDirectoryName(folder)?.Replace('\\', '/');
-            if (string.IsNullOrEmpty(parent)) throw new ArgumentException($"'{folder}' is not under Assets/");
-            EnsureFolder(parent);
-            AssetDatabase.CreateFolder(parent, Path.GetFileName(folder));
-        }
-
         /// <summary>Validate a new asset path: under Assets/, the expected extension, not overwriting an existing asset; creates the folders.</summary>
         public static string NewAssetPath(string path, string extension)
         {
@@ -63,7 +52,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
             if (!path.StartsWith("Assets/", StringComparison.Ordinal)) throw new ArgumentException($"'{path}' must start with Assets/");
             if (!path.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) throw new ArgumentException($"'{path}' must end with {extension}");
             if (AssetDatabase.LoadMainAssetAtPath(path) != null) throw new ArgumentException($"an asset already exists at '{path}' (choose another path)");
-            EnsureFolder(Path.GetDirectoryName(path));
+            RqlEditorApi.Instance.CreateFolder(Path.GetDirectoryName(path)!);
             return path;
         }
 
@@ -94,8 +83,6 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
             return hits[0];
         }
 
-        public static string TypeName(Type type) => type.Name;
-
         // ------------------------------------------------------------ animator controllers
 
         /// <summary>A layer by name (string) or index (number).</summary>
@@ -109,8 +96,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
                 throw new ArgumentException($"no layer named '{name}' (layers: {string.Join(", ", layers.Select(l => l.name))})");
             }
             if (!TryInt(layer ?? 0, out var index)) throw new ArgumentException("layer must be a layer name or an index");
-            if (index < 0 || index >= layers.Length)
-                throw new ArgumentOutOfRangeException(nameof(layer), $"layer index {index} is out of range: the controller has {layers.Length} layer(s)");
+            CheckIndex(index, layers.Length, "layer", "the controller", nameof(layer));
             return index;
         }
 
@@ -196,6 +182,13 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         }
 
         // ------------------------------------------------------------ values
+
+        /// <summary>Throw when <paramref name="index"/> is not an index into <paramref name="count"/> <paramref name="what"/>s of <paramref name="owner"/>.</summary>
+        public static void CheckIndex(int index, int count, string what, string owner, string parameter = "index")
+        {
+            if (index < 0 || index >= count)
+                throw new ArgumentOutOfRangeException(parameter, $"{what} index {index} is out of range: {owner} has {count} {what}(s)");
+        }
 
         public static bool TryInt(object? value, out int result)
         {

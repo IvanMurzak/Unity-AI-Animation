@@ -64,8 +64,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         internal static int RemoveCondition(AnimatorTransitionBase transition, int index)
         {
             var conditions = transition.conditions;
-            if (index < 0 || index >= conditions.Length)
-                throw new ArgumentOutOfRangeException(nameof(index), $"condition index {index} is out of range: the transition has {conditions.Length} condition(s)");
+            AnimationEdit.CheckIndex(index, conditions.Length, "condition", "the transition");
             transition.conditions = conditions.Where((c, i) => i != index).ToArray();
             return conditions.Length - 1;
         }
@@ -73,7 +72,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         internal static int ClearConditions(AnimatorTransitionBase transition)
         {
             var count = transition.conditions.Length;
-            transition.conditions = new AnimatorCondition[0];
+            transition.conditions = Array.Empty<AnimatorCondition>();
             return count;
         }
     }

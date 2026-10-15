@@ -46,7 +46,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         public string path => _binding.path;
 
         [RqlDescription("animated component type, e.g. Transform, SpriteRenderer, GameObject")]
-        public string type => AnimationEdit.TypeName(_binding.type);
+        public string type => _binding.type.Name;
 
         [RqlDescription("animated property, e.g. localPosition.x, m_Color.a, m_IsActive")]
         public string property => _binding.propertyName;
@@ -131,11 +131,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
             AnimationEdit.Edit(clip, what, () => AnimationUtility.SetEditorCurve(clip, _binding, curve));
         }
 
-        internal static void CheckKey(AnimationCurve curve, int index)
-        {
-            if (index < 0 || index >= curve.length)
-                throw new ArgumentOutOfRangeException(nameof(index), $"key index {index} is out of range: the curve has {curve.length} key(s)");
-        }
+        internal static void CheckKey(AnimationCurve curve, int index) => AnimationEdit.CheckIndex(index, curve.length, "key", "the curve");
 
         public override string ToString() => $"{(path.Length == 0 ? "" : path + ":")}{type}.{property}";
     }

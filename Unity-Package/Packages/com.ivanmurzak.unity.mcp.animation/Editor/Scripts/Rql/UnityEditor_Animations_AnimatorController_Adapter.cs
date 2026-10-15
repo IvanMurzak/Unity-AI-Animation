@@ -191,8 +191,9 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         internal static void SetDefaultState(AnimatorController c, string name, object? layer)
         {
             var sm = StateMachine(c, layer);
-            var holder = Holder(sm, State(sm, name));
-            AnimationEdit.Edit(holder, "set default state", () => holder.defaultState = State(sm, name));
+            var state = State(sm, name);
+            var holder = Holder(sm, state);
+            AnimationEdit.Edit(holder, "set default state", () => holder.defaultState = state);
         }
 
         // ------------------------------------------------------------ transitions

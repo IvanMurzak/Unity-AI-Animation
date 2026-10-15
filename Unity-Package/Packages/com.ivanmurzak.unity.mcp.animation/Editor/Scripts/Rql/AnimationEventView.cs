@@ -74,8 +74,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         private AnimationEvent[] Events()
         {
             var events = AnimationUtility.GetAnimationEvents(clip);
-            if (index < 0 || index >= events.Length)
-                throw new ArgumentOutOfRangeException(nameof(index), $"event index {index} is out of range: the clip has {events.Length} event(s)");
+            AnimationEdit.CheckIndex(index, events.Length, "event", "the clip");
             return events;
         }
 

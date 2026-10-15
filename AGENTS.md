@@ -1,11 +1,11 @@
 # AGENTS.md — Unity-AI-Animation
 
 Unity package `com.ivanmurzak.unity.mcp.animation` — makes Unity `AnimationClip` / `AnimatorController` assets and the
-`Animator` component available to Unity-MCP's RQL tools (`rql-query` / `rql-mutate`; branch `experiment/rql`, no extension
-MCP tools): the `animation` source (CreateClip, CreateController, animators), clip curve / key / event / settings views and
+`Animator` component available to Unity-MCP's RQL tools (`rql-query` / `rql-mutate`; no extension MCP
+tools): the `animation` source (CreateClip, CreateController, animators), clip curve / key / event / settings views and
 methods, controller layer / parameter views and state-machine methods, transition conditions. An extension of
 [AI Game Developer](https://github.com/IvanMurzak/Unity-MCP) (`com.ivanmurzak.unity.mcp`), generated from
-`Unity-AI-Tools-Template`; the user-facing tool list is in `README.md`.
+`Unity-AI-Tools-Template`; the former tool → RQL table is in `README.md`.
 
 ## Layout
 

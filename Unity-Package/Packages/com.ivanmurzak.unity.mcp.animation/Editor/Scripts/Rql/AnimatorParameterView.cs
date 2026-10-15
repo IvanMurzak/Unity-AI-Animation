@@ -46,8 +46,7 @@ namespace com.IvanMurzak.Unity.MCP.Editor.Rql.Animation
         private AnimatorControllerParameter[] Parameters()
         {
             var ps = controller.parameters;
-            if (index < 0 || index >= ps.Length)
-                throw new ArgumentOutOfRangeException(nameof(index), $"parameter index {index} is out of range: the controller has {ps.Length} parameter(s)");
+            AnimationEdit.CheckIndex(index, ps.Length, "parameter", "the controller");
             return ps;
         }
 
